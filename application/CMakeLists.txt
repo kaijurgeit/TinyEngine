@@ -19,9 +19,9 @@ target_link_libraries(${PROJECT_NAME}
     TinyEngine
 )
 
-# add_custom_command(
-#     TARGET Application POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-#             $<TARGET_RUNTIME_DLLS:Application> $<TARGET_FILE_DIR:Application>
-#     COMMAND_EXPAND_LISTS
-# )
+add_custom_command(
+    TARGET Application POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_RUNTIME_DLLS:Application> $<TARGET_FILE_DIR:Application>
+    COMMAND_EXPAND_LISTS
+)

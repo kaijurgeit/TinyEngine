@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.21)
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 option(INSTALL_GTEST "Enable installation of googletest." OFF)
@@ -35,3 +35,11 @@ add_test(
 )
 
 include(GoogleTest)
+
+
+add_custom_command(
+    TARGET Test_TinyEngine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_RUNTIME_DLLS:Test_TinyEngine> $<TARGET_FILE_DIR:Test_TinyEngine>
+    COMMAND_EXPAND_LISTS
+)

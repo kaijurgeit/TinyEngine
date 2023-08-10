@@ -12,7 +12,7 @@ set(SRC_FILES
 
 list(TRANSFORM SRC_FILES PREPEND "src/")
 
-add_library(${PROJECT_NAME} STATIC ${SRC_FILES})
+add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
 
 add_subdirectory(external)
 
