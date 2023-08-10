@@ -4,7 +4,7 @@ Tiny Engine is a small piece of software to create interactive applications for 
 
 ## Getting Started
 
-This repository is written in C++17 and it was tested using CMake 3.1 and Visual Studio 2022 on Windows.
+This repository is written in C++17 and it was tested using CMake 3.11 and Visual Studio 2022 on Windows.
 
 ### Download and Build the Repository
 
