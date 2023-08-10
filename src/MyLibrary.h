@@ -3,7 +3,7 @@
 
 namespace TE
 {
-    int Square(int x);    
+    __declspec(dllexport) int Square(int x);    
 }
 
 

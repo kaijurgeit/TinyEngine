@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.21)
 project(TinyEngine)
 set (CMAKE_CXX_STANDARD 17)
 list(APPEND CMAKE_MESSAGE_CONTEXT ${PROJECT_NAME})
@@ -26,3 +26,5 @@ if(BuildTests)
     enable_testing()
     add_subdirectory(test)
 endif()
+
+add_subdirectory(application)
