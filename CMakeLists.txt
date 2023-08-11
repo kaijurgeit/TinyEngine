@@ -6,8 +6,10 @@ list(APPEND CMAKE_MESSAGE_CONTEXT ${PROJECT_NAME})
 set(SRC_FILES
     TinyEngine.h
     Core.h
+    Main.h
     Application.h
     Application.cpp
+    ImportTest.h
 )
 
 list(TRANSFORM SRC_FILES PREPEND "src/")
