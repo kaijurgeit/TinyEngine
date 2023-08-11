@@ -10,15 +10,32 @@ This repository is written in C++17 and it was tested using CMake 3.11 and Visua
 
 ### Download and Build the Repository
 
-Execute the following lines in your terminal to download and build the repository:
+Download the repository:
 
 ```
 git clone https://github.com/kaijurgeit/TinyEngine.git
+```
+
+Build the repository. Add `--config <build_type>` to specify a Debug or Release <build_type>:
+
+```
 cmake -S . -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build
 ```
 
-If you'd like to build tests;
+Build with tests enabled:
+
 ```
 cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBuildTests=ON
+cmake --build build
+```
+
+Run tests:
+```
+cd build; ctest -j 10 -C <build_type>
+```
+
+Run Application:
+```
+./build/application/<build_type>/Application.exe
 ```

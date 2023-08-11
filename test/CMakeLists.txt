@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.21)
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 option(INSTALL_GTEST "Enable installation of googletest." OFF)
@@ -12,8 +12,7 @@ FetchContent_MakeAvailable(googletest)
 project(Test_TinyEngine)
 
 set(SRC_FILES 
-    MyLibrary_Test.cpp
-    MyOtherLibrary_Test.cpp
+    Init_Test.cpp
 )
 
 enable_testing()
@@ -21,7 +20,7 @@ enable_testing()
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 target_include_directories(
-    ${PROJECT_NAME} PRIVATE "../src"
+    ${PROJECT_NAME} PRIVATE "../TinyEngine/src"
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
@@ -35,3 +34,11 @@ add_test(
 )
 
 include(GoogleTest)
+
+
+add_custom_command(
+    TARGET Test_TinyEngine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_RUNTIME_DLLS:Test_TinyEngine> $<TARGET_FILE_DIR:Test_TinyEngine>
+    COMMAND_EXPAND_LISTS
+)
