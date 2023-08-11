@@ -12,7 +12,7 @@ FetchContent_MakeAvailable(googletest)
 project(Test_TinyEngine)
 
 set(SRC_FILES 
-
+    Init_Test.cpp
 )
 
 enable_testing()
