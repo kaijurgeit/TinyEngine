@@ -22,7 +22,7 @@ jobs:
         with:
           path: |
             **/build/_deps
-          key: ${{ runner.os }}.${{ github.job }}.${{ hashFiles('**/external/CMakeLists.txt') }}
+          key: ${{ runner.os }}.${{ github.job }}.${{ hashFiles('**/TinyEngine/vendor/CMakeLists.txt') }}
           restore-keys: ${{ runner.os }}.${{ github.job }}.
 
       - name: Run CMake
