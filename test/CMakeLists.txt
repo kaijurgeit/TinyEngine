@@ -12,8 +12,7 @@ FetchContent_MakeAvailable(googletest)
 project(Test_TinyEngine)
 
 set(SRC_FILES 
-    MyLibrary_Test.cpp
-    MyOtherLibrary_Test.cpp
+
 )
 
 enable_testing()
