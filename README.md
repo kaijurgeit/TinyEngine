@@ -2,8 +2,7 @@
 [![CI Release](https://github.com/kaijurgeit/TinyEngine/actions/workflows/release.yml/badge.svg)](https://github.com/kaijurgeit/TinyEngine/actions/workflows/release.yml)
 [![Windows](https://github.com/kaijurgeit/TinyEngine/actions/workflows/windows.yml/badge.svg)](https://github.com/kaijurgeit/TinyEngine/actions/workflows/windows.yml)
 
-Tiny Engine is a small piece of software to create interactive applications for Windows based on OpenGL. You can follow the progress of the project here: [TinyEngine Backlog]([https://link-url-here.org](https://github.com/users/kaijurgeit/projects/5)).
-
+Tiny Engine is a small piece of software to create interactive applications for Windows based on OpenGL. You can follow the progress of the project here: [TinyEngine Backlog](https://github.com/users/kaijurgeit/projects/5).
 
 ## Getting Started
 
