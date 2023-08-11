@@ -1,12 +1,13 @@
 ﻿#include "Window.h"
 
 #include <iostream>
-#include <GLFW/glfw3.h>
 
 #include "Core.h"
 
+
+
 namespace  TE
-{
+{    
     Window::Window(const WindowData& windowData)
     {
         Window(windowData.Title.c_str(), windowData.Width,windowData.Height);
@@ -14,9 +15,7 @@ namespace  TE
 
     Window::Window(const char* title, int width, int height)
     {
-        glfwInit();
         int success = glfwInit();
-        success = GLFW_FALSE;
         glfwSetErrorCallback([](int error, const char* msg)
         {
             std::cerr << printf("GLFW Error %i: {%s}", error, msg) << std::endl;
@@ -35,13 +34,21 @@ namespace  TE
             const void *userParam);
 #endif
     
-        GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
-        if (window == nullptr)
+        GLFWwindow* GlfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
+        if (GlfwWindow == nullptr)
         {
-            std::cout << "Failed to create GLFW window" << std::endl;
+            std::cerr << "Failed to create GLFW window" << std::endl;
             glfwTerminate();
         }
     
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);        
+        glfwMakeContextCurrent(GlfwWindow);
+    }
+
+    void Window::OnUpdate()
+    {
+        glfwSwapBuffers(GlfwWindow);
+        glfwPollEvents();
     }
 }
+
