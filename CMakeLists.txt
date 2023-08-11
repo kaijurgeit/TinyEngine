@@ -1,33 +1,14 @@
 cmake_minimum_required(VERSION 3.21)
-project(TinyEngine)
-set (CMAKE_CXX_STANDARD 17)
-list(APPEND CMAKE_MESSAGE_CONTEXT ${PROJECT_NAME})
-
-set(SRC_FILES
-    TinyEngine.h
-    Core.h
-    Main.h
-    Application.h
-    Application.cpp
-    ImportTest.h
-)
-
-list(TRANSFORM SRC_FILES PREPEND "src/")
-
-add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
-target_compile_definitions(TinyEngine PRIVATE TE_BUILD_DLL)
-
-add_subdirectory(external)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE
-    glad
-    glfw
-)
+add_subdirectory(TinyEngine)
 
 option(BuildTests OFF)
 if(BuildTests)
     enable_testing()
-    add_subdirectory(test)
+    add_subdirectory(Test)
 endif()
 
-add_subdirectory(application)
+option(BuildApp ON)
+if(BuildApp)
+    enable_testing()
+    add_subdirectory(App)
+endif()
