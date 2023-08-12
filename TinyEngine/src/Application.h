@@ -4,14 +4,20 @@
 
 namespace TE
 {
+    class Window;
+    class Renderer;
+    
     // Abstract Class
     class TE_API Application
     {
-    private:
     public:
         Application();
         virtual ~Application();
         void Run();
+        
+    private:
+        std::unique_ptr<Window> Window;
+        std::unique_ptr<Renderer> Renderer;
     };
     
     Application* CreateApplication();

@@ -1,10 +1,11 @@
 #pragma once
+#include <dinput.h>
 
 extern TE::Application* TE::CreateApplication();
 
 int main(int argc, char const *argv[])
 {
-    printf("Tiny Engine");
+    std::cout << "TinyEngine..." << std::endl;
     auto app = TE::CreateApplication();
     app->Run();
 
