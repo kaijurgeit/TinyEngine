@@ -4,15 +4,7 @@
 class App : public TE::Application
 {
 public:
-    App()
-    {
-        
-    }
-
-    ~App()
-    {
-
-    }
+    App() {}
 };
 
 TE::Application* TE::CreateApplication()

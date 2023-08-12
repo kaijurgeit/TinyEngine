@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "Core.h"
-
 
 
 namespace  TE
@@ -15,40 +13,46 @@ namespace  TE
 
     Window::Window(const char* title, int width, int height)
     {
-        int success = glfwInit();
-        glfwSetErrorCallback([](int error, const char* msg)
-        {
-            std::cerr << printf("GLFW Error %i: {%s}", error, msg) << std::endl;
-        });
-        TE_ASSERT(success, "Could not initialize GLFW!");
-
-        // OpenGL 4.3 - specify version
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        // glfw: initialize and configure
+        // ------------------------------
+        glfwInit();
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    
-#ifdef _DEBUG
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
-        void APIENTRY glDebugOutput(
-            GLenum source, GLenum type, unsigned int id, GLenum severity, GLsizei length, const char *message,
-            const void *userParam);
+
+#ifdef __APPLE__
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-    
-        GLFWwindow* GlfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
-        if (GlfwWindow == nullptr)
+
+        constexpr int SCR_WIDTH = 800;
+        constexpr int SCR_HEIGHT = 600;
+        
+        // glfw window creation
+        // --------------------
+        GlfwWindow = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+        if (GlfwWindow == NULL)
         {
-            std::cerr << "Failed to create GLFW window" << std::endl;
+            std::cout << "Failed to create GLFW window" << std::endl;
             glfwTerminate();
         }
-    
-        glfwSetInputMode(GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);        
         glfwMakeContextCurrent(GlfwWindow);
+    }
+
+    Window::~Window()
+    {
+		glfwDestroyWindow(GlfwWindow);
+        glfwTerminate();
     }
 
     void Window::OnUpdate()
     {
         glfwSwapBuffers(GlfwWindow);
         glfwPollEvents();
+    }
+
+    bool Window::ShouldClose()
+    {
+        return glfwWindowShouldClose(GlfwWindow);
     }
 }
 

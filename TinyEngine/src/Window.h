@@ -1,7 +1,5 @@
 ﻿#pragma once
-#include <memory>
 #include <string>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace TE
@@ -18,7 +16,9 @@ namespace TE
     public:
         Window(const WindowData& windowData);
         Window(const char* title, int width, int height);
+        ~Window();
         void OnUpdate();
+        bool ShouldClose();
         GLFWwindow* GlfwWindow;
     };
 }
