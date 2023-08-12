@@ -16,32 +16,12 @@ namespace TE
     }
     
     void Application::Run()
-    {   // while (!Window->ShouldClose())
-        // {
-        //     Window->OnUpdate();
-        //     Renderer->OnUpdate();
-        // }
-
-
-
-        // render loop
-        // -----------
+    {   
         while (true)
         {
-            // input
-            // -----
-
-            // render
-            // ------
             Renderer->OnUpdate();
-
-            // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-            // -------------------------------------------------------------------------------
             Window->OnUpdate();
         }
-
-        // glfw: terminate, clearing all previously allocated GLFW resources.
-        // ------------------------------------------------------------------
         glfwTerminate();
     }
 }

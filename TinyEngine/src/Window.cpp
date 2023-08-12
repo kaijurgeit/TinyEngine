@@ -13,23 +13,14 @@ namespace  TE
 
     Window::Window(const char* title, int width, int height)
     {
-        // glfw: initialize and configure
-        // ------------------------------
+        // OpenGL 4.3
         glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-#ifdef __APPLE__
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-
-        constexpr int SCR_WIDTH = 800;
-        constexpr int SCR_HEIGHT = 600;
-        
-        // glfw window creation
-        // --------------------
-        GlfwWindow = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+        // Create GLFW window
+        GlfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
         if (GlfwWindow == NULL)
         {
             std::cout << "Failed to create GLFW window" << std::endl;
