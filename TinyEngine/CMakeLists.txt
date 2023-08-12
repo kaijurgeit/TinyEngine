@@ -13,6 +13,8 @@ set(SRC_FILES
     ImportTest.h
     Window.h
     Window.cpp
+    Renderer.h
+    Renderer.cpp    
 )
 
 list(TRANSFORM SRC_FILES PREPEND "src/")
