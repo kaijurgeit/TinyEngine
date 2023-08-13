@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <regex>
 #include <sstream>
 
 
@@ -17,15 +18,24 @@ namespace TE
         return ParseToFloatVector(ReadFile(path));
     }
 
-    std::vector<float> FileSystem::ParseToFloatVector(const std::string& string)
+    std::vector<float> FileSystem::ParseToFloatVector(const std::string& str)
     {        
         std::vector<float> data;
-        return data;
-    }
+    
+        const std::regex regex("[+-]?([0-9]*[.])?[0-9]+");
+        std::smatch matches;
 
-    bool FileSystem::Foo()
-    {
-        return  true;
+        std::ifstream istream;
+        float x;
+
+        std::string::const_iterator searchStart( str.cbegin() );
+        while ( std::regex_search( searchStart, str.cend(), matches, regex ) )
+        {
+            data.push_back(std::stod(matches[0]));
+            searchStart = matches.suffix().first;
+        }
+    
+        return data;
     }
 
     std::stringstream FileSystem::ReadFileToStringStream(const char* path)
