@@ -28,14 +28,13 @@ namespace TE
     }
     
     void Application::Run()
-    {
+    {        
+        // build and compile shaders
         std::filesystem::path p(__FILE__);
         const std::string Path = p.parent_path().parent_path().string() + "/";
 
-        // build and compile shaders
-        // -------------------------
         Program ourShader( {
-            Shader(GL_VERTEX_SHADER, (Path + "shaders/Model.vert").c_str()),
+            Shader(GL_VERTEX_SHADER, (Path + "shaders/Light.vert").c_str()),
             Shader(GL_FRAGMENT_SHADER, (Path + "shaders/Model.frag").c_str())
         });
         ourShader.Create();

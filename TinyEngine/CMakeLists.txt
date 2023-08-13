@@ -3,7 +3,8 @@ project(TinyEngine)
 set (CMAKE_CXX_STANDARD 17)
 list(APPEND CMAKE_MESSAGE_CONTEXT ${PROJECT_NAME})
 
-
+# Files
+# ------------------------------------------------
 set(SRC_FILES
     TinyEngine.h
     Core.h
@@ -21,10 +22,18 @@ set(SRC_FILES
     Program.h
     Program.cpp
 )
-
 list(TRANSFORM SRC_FILES PREPEND "src/")
 
-add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
+set(SHADER_FILES
+    Light.frag
+    Light.vert
+)
+list(TRANSFORM SHADER_FILES PREPEND "shaders/")
+
+
+# Compile and Link
+# ------------------------------------------------
+add_library(${PROJECT_NAME} SHARED ${SRC_FILES} ${SHADER_FILES})
 target_compile_definitions(TinyEngine PRIVATE TE_BUILD_DLL)
 
 add_subdirectory(vendor)
