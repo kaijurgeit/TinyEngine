@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
+project(TinyEngine)
 add_subdirectory(TinyEngine)
 
 option(BuildTests OFF)

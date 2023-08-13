@@ -16,6 +16,10 @@ set(SRC_FILES
     Renderer.cpp
     FileSystem.h 
     FileSystem.cpp 
+    Shader.h
+    Shader.cpp
+    Program.h
+    Program.cpp
 )
 
 list(TRANSFORM SRC_FILES PREPEND "src/")
@@ -28,4 +32,6 @@ add_subdirectory(vendor)
 target_link_libraries(${PROJECT_NAME} PRIVATE
     glad
     glfw
+    stbimage
+    glm
 )
