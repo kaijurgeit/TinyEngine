@@ -44,3 +44,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     stbimage
     glm
 )
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)

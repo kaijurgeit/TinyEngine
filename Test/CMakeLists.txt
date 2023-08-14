@@ -42,3 +42,18 @@ add_custom_command(
             $<TARGET_RUNTIME_DLLS:Test_TinyEngine> $<TARGET_FILE_DIR:Test_TinyEngine>
     COMMAND_EXPAND_LISTS
 )
+
+set(Solution_Folder "test")
+set_target_properties(Test_TinyEngine PROPERTIES FOLDER ${Solution_Folder})
+if(TARGET gmock)    
+    set_target_properties(gmock PROPERTIES FOLDER ${Solution_Folder})
+endif()
+if(TARGET gmock_main)    
+    set_target_properties(gmock_main PROPERTIES FOLDER ${Solution_Folder})
+endif()
+if(TARGET gtest)    
+    set_target_properties(gtest PROPERTIES FOLDER ${Solution_Folder})
+endif()
+if(TARGET gtest_main)    
+    set_target_properties(gtest_main PROPERTIES FOLDER ${Solution_Folder})
+endif()

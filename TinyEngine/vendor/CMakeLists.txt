@@ -52,3 +52,13 @@ FetchContent_Declare(
     BUILD_COMMAND ""
 )
 FetchContent_MakeAvailable(glm)
+
+set(Solution_Folder "vendor")
+set_target_properties(glad PROPERTIES FOLDER ${Solution_Folder})
+set_target_properties(glfw PROPERTIES FOLDER ${Solution_Folder})
+set_target_properties(stbimage PROPERTIES FOLDER ${Solution_Folder})
+set_target_properties(glm PROPERTIES FOLDER ${Solution_Folder})
+
+if(TARGET glad-generate-files)    
+    set_target_properties(glad-generate-files PROPERTIES FOLDER ${Solution_Folder})
+endif()
