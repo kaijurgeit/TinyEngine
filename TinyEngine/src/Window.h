@@ -2,6 +2,8 @@
 #include <string>
 #include <GLFW/glfw3.h>
 
+#include "Core.h"
+
 namespace TE
 {
     struct WindowData
@@ -11,7 +13,7 @@ namespace TE
         int Height;
     };
 
-    class Window
+    class TE_API Window
     {
     public:
         Window(const WindowData& windowData);

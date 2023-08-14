@@ -5,7 +5,7 @@ extern TE::Application* TE::CreateApplication();
 
 int main(int argc, char const *argv[])
 {
-    std::cout << "TinyEngineX..." << std::endl;
+    std::cout << "TinyEngine..." << std::endl;
     auto app = TE::CreateApplication();
     app->Run();
 

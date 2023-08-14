@@ -5,7 +5,7 @@
 
 
 namespace  TE
-{    
+{
     Window::Window(const WindowData& windowData)
     {
         Window(windowData.Title.c_str(), windowData.Width,windowData.Height);
