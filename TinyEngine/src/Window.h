@@ -20,5 +20,9 @@ namespace TE
         void OnUpdate();
         bool ShouldClose();
         GLFWwindow* GlfwWindow;
+
+        std::string Title;
+        int Width;
+        int Height;
     };
 }

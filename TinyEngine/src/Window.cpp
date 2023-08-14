@@ -12,6 +12,7 @@ namespace  TE
     }
 
     Window::Window(const char* title, int width, int height)
+        : Title(title), Width(width), Height(height)
     {
         // OpenGL 4.3
         glfwInit();
