@@ -25,11 +25,11 @@ namespace TE
         void SetUniform(const std::string &name, const glm::mat2 &mat) const;
         void SetUniform(const std::string &name, const glm::mat3 &mat) const;
         void SetUniform(const std::string &name, const glm::mat4 &mat) const;
-
-        unsigned int id;
-        std::vector<Shader> shaders;
     
     private:
+        unsigned int Id;
+        std::vector<Shader> Shaders;
+        
         void LogDeleteIfCompilationFails();
     };
 }

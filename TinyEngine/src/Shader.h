@@ -6,9 +6,9 @@ namespace TE
     class Shader
     {
     public:
-        unsigned int type;
-        unsigned int id;
-        std::string source;
+        unsigned int Type;
+        unsigned int Id;
+        std::string Source;
     
         Shader(unsigned int type, const char* path);
         unsigned int Compile();

@@ -21,6 +21,10 @@ set(SRC_FILES
     Shader.cpp
     Program.h
     Program.cpp
+    VertexBuffer.h
+    VertexBuffer.cpp
+    IndexBuffer.h
+    IndexBuffer.cpp
 )
 list(TRANSFORM SRC_FILES PREPEND "src/")
 

@@ -11,6 +11,8 @@
 #include "Shader.h"
 #include "Program.h"
 #include "FileSystem.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 namespace TE
 {
@@ -66,10 +68,10 @@ namespace TE
         // load cube vertex data
         std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube.txt").c_str());
         
-        // build and compile shaders
+        // build and compile Shaders
         Program light( {
-            Shader(GL_VERTEX_SHADER, (Path + "shaders/Light.vert").c_str()),
-            Shader(GL_FRAGMENT_SHADER, (Path + "shaders/Light.frag").c_str())
+            Shader(GL_VERTEX_SHADER, (Path + "Shaders/Light.vert").c_str()),
+            Shader(GL_FRAGMENT_SHADER, (Path + "Shaders/Light.frag").c_str())
         });
         light.Create();
 
@@ -84,17 +86,12 @@ namespace TE
 #pragma endregion light
 
 #pragma region glBuffers
-        unsigned int VBO;
-        glGenBuffers(1, &VBO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+        TE::VertexBuffer Vb(vertices.data(), vertices.size() * sizeof(float));
 
         unsigned int lightCubeVAO;
+        
         glGenVertexArrays(1, &lightCubeVAO);
         glBindVertexArray(lightCubeVAO);
-
-        // note that we update the lamp's position attribute's stride to reflect the updated buffer data
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 #pragma endregion glBuffers
