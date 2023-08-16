@@ -8,8 +8,8 @@
 #include "Camera.h"
 #include "Renderer.h"
 #include "Window.h"
+#include "ShaderElement.h"
 #include "Shader.h"
-#include "Program.h"
 #include "FileSystem.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
@@ -70,9 +70,9 @@ namespace TE
         std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube.txt").c_str());
         
         // build and compile Shaders
-        Program light( {
-            Shader(GL_VERTEX_SHADER, (Path + "Shaders/Light.vert").c_str()),
-            Shader(GL_FRAGMENT_SHADER, (Path + "Shaders/Light.frag").c_str())
+        Shader light( {
+            ShaderElement(GL_VERTEX_SHADER, (Path + "Shaders/Light.vert").c_str()),
+            ShaderElement(GL_FRAGMENT_SHADER, (Path + "Shaders/Light.frag").c_str())
         });
         light.Create();
 

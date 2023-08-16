@@ -21,8 +21,8 @@ set(SRC_FILES
     FileSystem.cpp 
     Shader.h
     Shader.cpp
-    Program.h
-    Program.cpp
+    ShaderElement.h
+    ShaderElement.cpp
     VertexBuffer.h
     VertexBuffer.cpp
     IndexBuffer.h

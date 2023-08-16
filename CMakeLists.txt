@@ -12,7 +12,7 @@ option(BuildApp ON)
 if(BuildApp)
     enable_testing()
     add_subdirectory(App)
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT App)
 endif()
 
 set(CMAKE_BUILD_TYPE Debug)
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT App)
