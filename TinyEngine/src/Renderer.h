@@ -1,21 +1,20 @@
 ﻿#pragma once
-#include <glad/glad.h>"
-#include <GLFW/glfw3.h>
+
+
 
 namespace TE
 {
+    class Shader;
     class IndexBuffer;
     class VertexArray;
-}
-
-namespace TE
-{
+    
     class Renderer
     {
     public:
         Renderer();
-        void OnUpdate();
+        void Clear();
 
-        // void Draw(const VertexArray& va, const IndexBuffer& indexBuffer, const ShaderElement& shader) const;
+        void Draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader) const;
+        void Draw(const VertexArray& vertexArray, const Shader& shader) const;
     };
 }

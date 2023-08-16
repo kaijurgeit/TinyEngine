@@ -17,6 +17,5 @@ namespace TE
         void Unbind() const;
         unsigned int Id;
         void Foo(const VertexBuffer& vb, const VertexBufferLayout& layout);
-    private:
     };    
 }

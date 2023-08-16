@@ -1,5 +1,8 @@
 #pragma once
 
+#include <glad/glad.h>
+// #include <GLFW/glfw3.h>
+
 #ifdef TE_BUILD_DLL
     #define TE_API __declspec(dllexport)
 #else

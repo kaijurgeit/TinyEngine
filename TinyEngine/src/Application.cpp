@@ -1,7 +1,7 @@
 #include "Application.h"
 
 #include <filesystem>
-#include <glad/glad.h>
+// #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -18,7 +18,6 @@
 namespace TE
 {
 #pragma region globals
-    void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     void mouse_callback(GLFWwindow* window, double xpos, double ypos);
     void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
     void processInput(GLFWwindow *window);
@@ -40,7 +39,6 @@ namespace TE
         Window = std::make_unique<TE::Window>("TinyEngine App", 800, 600);
         Renderer = std::make_unique<TE::Renderer>();
         
-        glfwSetFramebufferSizeCallback(Window->GlfwWindow, framebuffer_size_callback);
         glfwSetCursorPosCallback(Window->GlfwWindow, mouse_callback);
         glfwSetInputMode(Window->GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
@@ -80,13 +78,12 @@ namespace TE
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
 
-        light.Use();
+        light.Bind();
         light.SetUniform("projection", projection);
         light.SetUniform("view", view);
         light.SetUniform("model", model);
 #pragma endregion light
 
-#pragma region glBuffer        
         VertexArray va;
         VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
         
@@ -94,8 +91,6 @@ namespace TE
         layout.Add<float>(3);
         va.Bind();
         va.AddBuffer(vb, layout);
-#pragma endregion glBuffers
-
         
         while (true)
         {
@@ -109,21 +104,7 @@ namespace TE
         // -----
         processInput(Window->GlfwWindow);
 
-        // render
-        // ------
-        glClearColor(0.25f, 0.05f, 0.05f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-            
-        projection = glm::perspective(
-                glm::radians(45.f),
-                static_cast<float>(Window->Width) / static_cast<float>(Window->Height),
-            0.1f, 100.0f);
-        view = camera.GetViewMatrix();
-        
-        // render the loaded model
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        Renderer->Clear();
 
 
 #pragma region lightCube            
@@ -131,27 +112,20 @@ namespace TE
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
 
-        light.Use();
+        light.Bind();
         light.SetUniform("projection", projection);
         light.SetUniform("view", view);
-        light.SetUniform("model", model);
+        light.SetUniform("model", model);        
         
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glStencilMask(0xFF);
-        va.Bind();
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        
+        Renderer->Draw(va, light);
 
         float scale = 1.1f;
         model = glm::scale(model, glm::vec3(scale, scale, scale));
         
         
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        va.Unbind();
 #pragma endregion lightCube
-
-        glfwSwapBuffers(Window->GlfwWindow);
-        glfwPollEvents();
+            
+        Window->OnUpdate();
     }
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
@@ -172,13 +146,6 @@ namespace TE
             camera.ProcessKeyboard(LEFT, deltaTime);
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
             camera.ProcessKeyboard(RIGHT, deltaTime);
-    }
-    
-    void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-    {
-        // make sure the viewport matches the new window dimensions; note that width and 
-        // height will be significantly larger than specified on retina displays.
-        glViewport(0, 0, width, height);
     }
 
     // glfw: whenever the mouse moves, this callback is called

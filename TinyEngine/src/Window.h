@@ -1,11 +1,12 @@
 ﻿#pragma once
 #include <string>
-#include <GLFW/glfw3.h>
 
 #include "Core.h"
+#include <GLFW/glfw3.h>
 
 namespace TE
 {
+    
     struct WindowData
     {
         std::string Title;
@@ -17,6 +18,8 @@ namespace TE
     {
     public:
         Window(const WindowData& windowData);
+        void InitWindow(const char* title, int width, int height);
+        void InitCallbacks();
         Window(const char* title, int width, int height);
         ~Window();
         void OnUpdate();

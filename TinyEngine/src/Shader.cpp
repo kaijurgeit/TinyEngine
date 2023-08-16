@@ -13,7 +13,12 @@ namespace TE
 {
 }
 
-unsigned Shader::Create()
+    Shader::~Shader()
+    {
+        glDeleteProgram(Id);
+    }
+
+    unsigned Shader::Create()
 {
     Id = glCreateProgram();
     for (ShaderElement& shader : Shaders)
@@ -34,9 +39,14 @@ unsigned Shader::Create()
     return Id;
 }
 
-void Shader::Use()
+void Shader::Bind() const
 {
     glUseProgram(Id);
+}
+
+void Shader::Unbind() const
+{
+    glUseProgram(0);
 }
 
 void Shader::SetUniform(const std::string& name, bool value) const

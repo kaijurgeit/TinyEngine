@@ -11,8 +11,10 @@ namespace TE
     {
     public:
         Shader(std::vector<ShaderElement> shaders);
+        ~Shader();
         unsigned int Create();
-        void Use();
+        void Bind() const;
+        void Unbind() const;
         void SetUniform(const std::string &name, bool value) const;
         void SetUniform(const std::string &name, int value) const;
         void SetUniform(const std::string &name, float value) const;

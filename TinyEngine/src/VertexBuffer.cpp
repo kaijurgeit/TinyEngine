@@ -1,6 +1,8 @@
 ﻿#include "VertexBuffer.h"
 #include "Renderer.h"
 
+#include <glad/glad.h>
+
 namespace TE
 {
     VertexBuffer::VertexBuffer(const void* data, unsigned size)

@@ -2,6 +2,13 @@
 
 #include <iostream>
 
+#include "IndexBuffer.h"
+#include "Shader.h"
+#include "VertexArray.h"
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 namespace TE
 {
     void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, 
@@ -25,19 +32,34 @@ namespace TE
         }
     }
 
-    void Renderer::OnUpdate()
+    void Renderer::Clear()
     {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
+    void Renderer::Draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer, const Shader& shader) const
+    {
+        // shader.Bind();
+        // vertexArray.Bind();
+        // indexBuffer.Bind();
+        // glDrawElements(GL_TRIANGLES, vertexArray)
+    }
+
+    void Renderer::Draw(const VertexArray& vertexArray, const Shader& shader) const
+    {
+        shader.Bind();
+        vertexArray.Bind();
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+    }
+
     void APIENTRY glDebugOutput(GLenum source, 
-                            GLenum type, 
-                            unsigned int id, 
-                            GLenum severity, 
-                            GLsizei length, 
-                            const char *message, 
-                            const void *userParam)
+                                GLenum type, 
+                                unsigned int id, 
+                                GLenum severity, 
+                                GLsizei length, 
+                                const char *message, 
+                                const void *userParam)
 {
     // ignore non-significant error/warning codes
     if(id == 131169 || id == 131185 || id == 131218 || id == 131204) return; 
