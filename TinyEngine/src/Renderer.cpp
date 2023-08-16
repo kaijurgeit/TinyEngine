@@ -2,10 +2,6 @@
 
 #include <iostream>
 
-#include "Core.h"
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
-
 namespace TE
 {
     void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id, GLenum severity, 

@@ -1,13 +1,12 @@
 ﻿#include "VertexBuffer.h"
-
-#include <glad/glad.h>
+#include "Renderer.h"
 
 namespace TE
 {
     VertexBuffer::VertexBuffer(const void* data, unsigned size)
     {
         glGenBuffers(1, &Id);
-        glBindBuffer(GL_ARRAY_BUFFER, Id);
+        Bind();
         glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
     }
 

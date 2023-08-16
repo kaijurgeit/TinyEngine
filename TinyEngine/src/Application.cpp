@@ -12,7 +12,8 @@
 #include "Program.h"
 #include "FileSystem.h"
 #include "VertexBuffer.h"
-#include "IndexBuffer.h"
+#include "VertexArray.h"
+#include "VertexBufferLayout.h"
 
 namespace TE
 {
@@ -85,15 +86,14 @@ namespace TE
         light.SetUniform("model", model);
 #pragma endregion light
 
-#pragma region glBuffers
-        TE::VertexBuffer Vb(vertices.data(), vertices.size() * sizeof(float));
-
-        unsigned int lightCubeVAO;
+#pragma region glBuffer        
+        VertexArray va;
+        VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
         
-        glGenVertexArrays(1, &lightCubeVAO);
-        glBindVertexArray(lightCubeVAO);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
+        VertexBufferLayout layout;
+        layout.Add<float>(3);
+        va.Bind();
+        va.AddBuffer(vb, layout);
 #pragma endregion glBuffers
 
         
@@ -137,8 +137,8 @@ namespace TE
         light.SetUniform("model", model);
         
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glStencilMask(0xFF);        
-        glBindVertexArray(lightCubeVAO);
+        glStencilMask(0xFF);
+        va.Bind();
         glDrawArrays(GL_TRIANGLES, 0, 36);
         
 
@@ -147,7 +147,7 @@ namespace TE
         
         
         glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
+        va.Unbind();
 #pragma endregion lightCube
 
         glfwSwapBuffers(Window->GlfwWindow);

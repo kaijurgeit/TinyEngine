@@ -13,6 +13,8 @@ set(SRC_FILES
     Application.cpp
     Window.h
     Window.cpp
+    Camera.h
+    Camera.cpp
     Renderer.h
     Renderer.cpp
     FileSystem.h 
@@ -25,6 +27,9 @@ set(SRC_FILES
     VertexBuffer.cpp
     IndexBuffer.h
     IndexBuffer.cpp
+    VertexArray.h
+    VertexArray.cpp
+    VertexBufferLayout.h
 )
 list(TRANSFORM SRC_FILES PREPEND "src/")
 
