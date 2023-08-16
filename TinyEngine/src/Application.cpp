@@ -1,7 +1,6 @@
 #include "Application.h"
 
 #include <filesystem>
-// #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -60,12 +59,14 @@ namespace TE
 #pragma endregion camera
         
 #pragma region light
+        constexpr glm::vec3 lightPos(0.5f);
+        
         // get path
         std::filesystem::path p(__FILE__);
         const std::string Path = p.parent_path().parent_path().string() + "/";
         
         // load cube vertex data
-        std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube.txt").c_str());
+        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube.txt").c_str());
         
         // build and compile Shaders
         Shader light( {
@@ -73,15 +74,7 @@ namespace TE
             ShaderElement(GL_FRAGMENT_SHADER, (Path + "Shaders/Light.frag").c_str())
         });
         light.Create();
-
-        const glm::vec3 lightPos(0.5f);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-
         light.Bind();
-        light.SetUniform("projection", projection);
-        light.SetUniform("view", view);
-        light.SetUniform("model", model);
 #pragma endregion light
 
         VertexArray va;
@@ -94,39 +87,39 @@ namespace TE
         
         while (true)
         {
-        // per-frame time logic
-        // --------------------
-        float currentFrame = static_cast<float>(glfwGetTime());
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-        
-        // input
-        // -----
-        processInput(Window->GlfwWindow);
-
-        Renderer->Clear();
-
-
-#pragma region lightCube            
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-
-        light.Bind();
-        light.SetUniform("projection", projection);
-        light.SetUniform("view", view);
-        light.SetUniform("model", model);        
-        
-        Renderer->Draw(va, light);
-
-        float scale = 1.1f;
-        model = glm::scale(model, glm::vec3(scale, scale, scale));
-        
-        
-#pragma endregion lightCube
+            // per-frame time logic
+            // --------------------
+            const float currentFrame = static_cast<float>(glfwGetTime());
+            deltaTime = currentFrame - lastFrame;
+            lastFrame = currentFrame;
             
-        Window->OnUpdate();
-    }
+            // input
+            // -----
+            processInput(Window->GlfwWindow);
+            Renderer->Clear();
+            
+            glm::mat4 projection = glm::perspective(
+                    glm::radians(45.f),
+                    static_cast<float>(Window->Width) / static_cast<float>(Window->Height),
+                0.1f, 100.0f);
+            glm::mat4 view = camera.GetViewMatrix();
+        
+
+
+#pragma region render_light            
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, lightPos);
+            model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+
+            light.SetUniform("projection", projection);
+            light.SetUniform("view", view);
+            light.SetUniform("model", model);
+
+            Renderer->Draw(va, light);
+#pragma endregion render_light
+
+            Window->OnUpdate();
+        }
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------

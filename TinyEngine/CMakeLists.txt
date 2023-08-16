@@ -44,6 +44,7 @@ list(TRANSFORM SHADER_FILES PREPEND "shaders/")
 # ------------------------------------------------
 add_library(${PROJECT_NAME} SHARED ${SRC_FILES} ${SHADER_FILES})
 target_compile_definitions(TinyEngine PRIVATE TE_BUILD_DLL)
+target_compile_definitions(TinyEngine PRIVATE GLFW_INCLUDE_NONE)
 
 add_subdirectory(vendor)
 

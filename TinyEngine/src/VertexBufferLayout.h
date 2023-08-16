@@ -1,9 +1,8 @@
 ﻿#pragma once
 #include <vector>
-#include <windows.h>
+#include <glad/glad.h>
 
 #include "Core.h"
-#include "Renderer.h"
 
 namespace TE
 {
@@ -21,7 +20,6 @@ namespace TE
             case GL_UNSIGNED_INT:   return 4;                
             case GL_UNSIGNED_BYTE:  return 1;          
             }
-            TE_ASSERT(false, "Unknown type");
             return 0;
         }
     };
