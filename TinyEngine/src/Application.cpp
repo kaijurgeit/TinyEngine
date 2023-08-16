@@ -102,36 +102,64 @@ namespace TE
         
         while (true)
         {
-            float currentFrame = static_cast<float>(glfwGetTime());
-            deltaTime = currentFrame - lastFrame;
-            lastFrame = currentFrame;
-            
-            processInput(Window->GlfwWindow);
-            Renderer->OnUpdate();
-            Window->OnUpdate();
+        // per-frame time logic
+        // --------------------
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        
+        // input
+        // -----
+        processInput(Window->GlfwWindow);
 
-            // update matrices based on camera
-            projection = glm::perspective(
+        // render
+        // ------
+        glClearColor(0.25f, 0.05f, 0.05f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+            
+        projection = glm::perspective(
                 glm::radians(45.f),
                 static_cast<float>(Window->Width) / static_cast<float>(Window->Height),
             0.1f, 100.0f);
-            glm::mat4 view = camera.GetViewMatrix();
+        view = camera.GetViewMatrix();
+        
+        // render the loaded model
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
 
-            // update light 
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, lightPos);
-            model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-            
-            light.Use();
-            light.SetUniform("projection", projection);
-            light.SetUniform("view", view);
-            light.SetUniform("model", model);
-            
-            glBindVertexArray(lightCubeVAO);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-            glBindVertexArray(0);
-            glEnable(GL_DEPTH_TEST);
-        }
+
+#pragma region lightCube            
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+
+        light.Use();
+        light.SetUniform("projection", projection);
+        light.SetUniform("view", view);
+        light.SetUniform("model", model);
+        
+        glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        glStencilMask(0xFF);        
+        glBindVertexArray(lightCubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        
+
+        float scale = 1.1f;
+        model = glm::scale(model, glm::vec3(scale, scale, scale));
+        
+        
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+#pragma endregion lightCube
+
+        glfwSwapBuffers(Window->GlfwWindow);
+        glfwPollEvents();
+    }
+
+    // glfw: terminate, clearing all previously allocated GLFW resources.
+    // ------------------------------------------------------------------
+    glfwTerminate();
     }
     
     void processInput(GLFWwindow *window)
