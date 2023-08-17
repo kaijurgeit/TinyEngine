@@ -27,6 +27,6 @@ namespace TE
         int Width;
         int Height;
 
-        std::function<void*(Event&)> EventCallback;
+        std::function<void(Event&)> EventCallback;
     };
 }

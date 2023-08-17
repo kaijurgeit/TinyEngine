@@ -51,6 +51,8 @@ namespace  TE
         glfwSetKeyCallback(GlfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
         {
             Window& self = *(Window*)glfwGetWindowUserPointer(window);
+            Event event;
+            self.EventCallback(event);
             
             // switch(action)
             // {

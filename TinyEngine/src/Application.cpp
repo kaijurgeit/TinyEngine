@@ -36,6 +36,10 @@ namespace TE
     Application::Application()    
     {
         Window = std::make_unique<TE::Window>("TinyEngine App", 800, 600);
+        Window->EventCallback = [](Event& event)
+        {
+            std::cout << "Test Event Callback" << std::endl;  
+        };
         Renderer = std::make_unique<TE::Renderer>();
         
         glfwSetCursorPosCallback(Window->GlfwWindow, mouse_callback);
