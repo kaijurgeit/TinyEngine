@@ -117,7 +117,7 @@ namespace TE
 
             Renderer->Draw(va, light);
 #pragma endregion render_light
-            glDisable(GL_FALSE);     // uncomment to check debug
+            // glDisable(GL_FALSE);     // uncomment to check debug
 
             Window->OnUpdate();
                
