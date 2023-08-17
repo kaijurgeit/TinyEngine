@@ -6,7 +6,7 @@
 
 namespace TE
 {
-    struct VertexBufferElement
+    struct TE_API VertexBufferElement
     {
         unsigned int Type;
         unsigned int Count;
@@ -24,7 +24,7 @@ namespace TE
         }
     };
     
-    class VertexBufferLayout
+    class TE_API VertexBufferLayout
     {
     public:
         VertexBufferLayout()

@@ -2,6 +2,8 @@
 
 #include "Core.h"
 
+class Event;
+
 namespace TE
 {
     class Window;
@@ -10,10 +12,11 @@ namespace TE
     // Abstract Class
     class TE_API Application
     {
-    public:
+    public:        
         Application();
         virtual ~Application();
         void Run();
+        void OnEvent(Event& event);
         
     private:
         std::unique_ptr<Window> Window;

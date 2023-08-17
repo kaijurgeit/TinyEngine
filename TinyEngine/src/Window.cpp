@@ -3,13 +3,10 @@
 
 #include <glad/glad.h>
 
+#include "Event.h"
+
 namespace  TE
-{    
-    Window::Window(const WindowData& windowData)
-    {
-        Window(windowData.Title.c_str(), windowData.Width,windowData.Height);
-    }
-    
+{   
     Window::Window(const char* title, int width, int height)
         : Title(title), Width(width), Height(height)
     {
@@ -30,6 +27,9 @@ namespace  TE
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef _DEBUG
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+#endif
 
         // Create GLFW window
         GlfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
@@ -43,9 +43,38 @@ namespace  TE
 
     void Window::InitCallbacks()
     {
+        glfwSetWindowUserPointer(GlfwWindow, this);
+        
         glfwSetFramebufferSizeCallback(GlfwWindow, [](GLFWwindow* window, int width, int height)
         {
             glViewport(0, 0, width, height);
+        });
+
+        glfwSetKeyCallback(GlfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+        {
+            Window& self = *(Window*)glfwGetWindowUserPointer(window);
+            
+            switch(action)
+            {
+                case GLFW_PRESS:
+                {
+                    InputEvent event(key, ETriggerEvent::Pressed);
+                    self.EventCallback(event);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {   
+                    InputEvent event(key, ETriggerEvent::Released);
+                    self.EventCallback(event);
+                    break;
+                }
+                case GLFW_REPEAT:
+                {   
+                    InputEvent event(key, ETriggerEvent::Repeat);
+                    self.EventCallback(event);
+                    break;
+                }
+            }
         });
     }
 

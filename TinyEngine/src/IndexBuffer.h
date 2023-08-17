@@ -1,9 +1,11 @@
 ﻿#pragma once
 #include "glad/glad.h"
 
+#include "Core.h"
+
 namespace TE
 {
-    class IndexBuffer
+    class TE_API IndexBuffer
     {
     public:
         IndexBuffer(const void* data, unsigned int count);

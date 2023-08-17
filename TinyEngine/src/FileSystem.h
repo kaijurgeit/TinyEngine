@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include "Core.h"
-
 #include <string>
 #include <vector>
+
+#include "Core.h"
 
 namespace TE
 {

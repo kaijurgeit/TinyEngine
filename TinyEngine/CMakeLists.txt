@@ -6,30 +6,31 @@ list(APPEND CMAKE_MESSAGE_CONTEXT ${PROJECT_NAME})
 # Files
 # ------------------------------------------------
 set(SRC_FILES
-    TinyEngine.h
-    Core.h
-    Main.h
     Application.h
     Application.cpp
-    Window.h
-    Window.cpp
     Camera.h
     Camera.cpp
-    Renderer.h
-    Renderer.cpp
+    Core.h
+    Event.h
     FileSystem.h 
     FileSystem.cpp 
+    IndexBuffer.h
+    IndexBuffer.cpp
+    Main.h
+    Renderer.h
+    Renderer.cpp
     Shader.h
     Shader.cpp
     ShaderElement.h
     ShaderElement.cpp
-    VertexBuffer.h
-    VertexBuffer.cpp
-    IndexBuffer.h
-    IndexBuffer.cpp
+    TinyEngine.h
     VertexArray.h
     VertexArray.cpp
+    VertexBuffer.h
+    VertexBuffer.cpp
     VertexBufferLayout.h
+    Window.h
+    Window.cpp
 )
 list(TRANSFORM SRC_FILES PREPEND "src/")
 
