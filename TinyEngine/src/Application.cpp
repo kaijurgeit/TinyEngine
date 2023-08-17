@@ -49,6 +49,9 @@ namespace TE
     
     void Application::Run()
     {
+        // get path
+        std::filesystem::path p(__FILE__);
+        const std::string Path = p.parent_path().parent_path().string() + "/";
 #pragma region camera
         // viewer matrix transformations
         glm::mat4 projection = glm::perspective(
@@ -62,27 +65,33 @@ namespace TE
 #pragma region light
         constexpr glm::vec3 lightPos(0.5f);
         
-        // get path
-        std::filesystem::path p(__FILE__);
-        const std::string Path = p.parent_path().parent_path().string() + "/";
-        
         // load cube vertex data
-        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube.txt").c_str());
+        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex.txt").c_str());
         
         // build and compile Shaders
         Shader light( {
             ShaderElement(GL_VERTEX_SHADER, (Path + "Shaders/Light.vert").c_str()),
-            ShaderElement(GL_FRAGMENT_SHADER, (Path + "Shaders/Light.frag").c_str())
-        });
+            ShaderElement(GL_FRAGMENT_SHADER, (Path + "Shaders/Light.frag").c_str())});
         light.Create();
         light.Bind();
 #pragma endregion light
+
+#pragma region texCube
+        constexpr glm::vec3 texCubePos(1.0f, 0.5f, 1.0f);
+
+        Shader texCube( {
+            ShaderElement(GL_VERTEX_SHADER, (Path + "Shaders/Light.vert").c_str()),
+            ShaderElement(GL_FRAGMENT_SHADER, (Path + "Shaders/Light.frag").c_str())});
+        texCube.Create();
+        texCube.Bind();        
+#pragma endregion texCube        
 
         VertexArray va;
         VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
         
         VertexBufferLayout layout;
         layout.Add<float>(3);
+        layout.Add<float>(2);
         va.Bind();
         va.AddBuffer(vb, layout);
         
@@ -104,8 +113,6 @@ namespace TE
                     static_cast<float>(Window->Width) / static_cast<float>(Window->Height),
                 0.1f, 100.0f);
             glm::mat4 view = camera.GetViewMatrix();
-        
-
 
 #pragma region render_light            
             glm::mat4 model = glm::mat4(1.0f);
@@ -118,8 +125,18 @@ namespace TE
 
             Renderer->Draw(va, light);
 #pragma endregion render_light
-            // glDisable(GL_FALSE);     // uncomment to check debug
+#pragma region render_texCube
+            model = glm::translate(model, texCubePos);
+            model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
 
+            texCube.SetUniform("projection", projection);
+            texCube.SetUniform("view", view);
+            texCube.SetUniform("model", model);
+
+            Renderer->Draw(va, texCube);
+#pragma endregion render_texCube
+            
+            // glDisable(GL_FALSE);     // uncomment to check debug
             Window->OnUpdate();               
         }
 
