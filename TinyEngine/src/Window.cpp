@@ -3,6 +3,8 @@
 
 #include <glad/glad.h>
 
+#include "Event.h"
+
 namespace  TE
 {   
     Window::Window(const char* title, int width, int height)
@@ -51,13 +53,28 @@ namespace  TE
         glfwSetKeyCallback(GlfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
         {
             Window& self = *(Window*)glfwGetWindowUserPointer(window);
-            Event event;
-            self.EventCallback(event);
             
-            // switch(action)
-            // {
-            // case GLFW_PRESS:
-            // }
+            switch(action)
+            {
+                case GLFW_PRESS:
+                {
+                    InputEvent event(key, ETriggerEvent::Pressed);
+                    self.EventCallback(event);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {   
+                    InputEvent event(key, ETriggerEvent::Released);
+                    self.EventCallback(event);
+                    break;
+                }
+                case GLFW_REPEAT:
+                {   
+                    InputEvent event(key, ETriggerEvent::Repeat);
+                    self.EventCallback(event);
+                    break;
+                }
+            }
         });
     }
 

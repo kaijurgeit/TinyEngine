@@ -36,10 +36,7 @@ namespace TE
     Application::Application()    
     {
         Window = std::make_unique<TE::Window>("TinyEngine App", 800, 600);
-        Window->EventCallback = [](Event& event)
-        {
-            std::cout << "Test Event Callback" << std::endl;  
-        };
+        Window->EventCallback = std::bind(&Application::OnEvent, this, std::placeholders::_1);
         Renderer = std::make_unique<TE::Renderer>();
         
         glfwSetCursorPosCallback(Window->GlfwWindow, mouse_callback);
@@ -123,15 +120,19 @@ namespace TE
 #pragma endregion render_light
             // glDisable(GL_FALSE);     // uncomment to check debug
 
-            Window->OnUpdate();
-               
+            Window->OnUpdate();               
         }
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();
     }
-    
+
+    void Application::OnEvent(Event& event)
+    {
+        std::cout << "Test Event Callback via Bind - " << event.ToString() << std::endl;  
+    }
+
     void processInput(GLFWwindow *window)
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)

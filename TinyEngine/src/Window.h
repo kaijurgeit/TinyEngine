@@ -4,23 +4,20 @@
 
 #include <GLFW/glfw3.h>
 #include "Core.h"
-
-struct Event
-{
-    
-};
+#include "Event.h"
 
 namespace TE
 {
     class TE_API Window
     {
-    public:
+    public:        
         void InitWindow(const char* title, int width, int height);
         void InitCallbacks();
         Window(const char* title, int width, int height);
         ~Window();
         void OnUpdate();
         bool ShouldClose();
+        
         GLFWwindow* GlfwWindow;
 
         std::string Title;
