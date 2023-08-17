@@ -3,11 +3,14 @@
 #include <vector>
 #include <glm/fwd.hpp>
 
+#include "Core.h"
+#include "ShaderElement.h"
+
 namespace TE
 {
     class ShaderElement;
 
-    class Shader
+    class TE_API Shader
     {
     public:
         Shader(std::vector<ShaderElement> shaders);

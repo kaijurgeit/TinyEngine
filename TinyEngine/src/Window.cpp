@@ -4,12 +4,7 @@
 #include <glad/glad.h>
 
 namespace  TE
-{    
-    Window::Window(const WindowData& windowData)
-    {
-        Window(windowData.Title.c_str(), windowData.Width,windowData.Height);
-    }
-    
+{   
     Window::Window(const char* title, int width, int height)
         : Title(title), Width(width), Height(height)
     {
@@ -43,9 +38,21 @@ namespace  TE
 
     void Window::InitCallbacks()
     {
+        glfwSetWindowUserPointer(GlfwWindow, this);
+        
         glfwSetFramebufferSizeCallback(GlfwWindow, [](GLFWwindow* window, int width, int height)
         {
             glViewport(0, 0, width, height);
+        });
+
+        glfwSetKeyCallback(GlfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+        {
+            Window& self = *(Window*)glfwGetWindowUserPointer(window);
+            
+            // switch(action)
+            // {
+            // case GLFW_PRESS:
+            // }
         });
     }
 

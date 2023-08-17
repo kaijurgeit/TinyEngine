@@ -39,3 +39,5 @@ Run Application:
 ```
 ./build/application/<build_type>/Application.exe
 ```
+
+If you'd like to modify and build the *App* together with *TinyEngine* in **Rider**, you have to disable "Use ReSharper Build" under  *Settings → Build, Execution, Deployment → Toolset*. If you don't do this, the dll will not be rebuild.

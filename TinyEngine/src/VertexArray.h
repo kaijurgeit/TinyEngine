@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Core.h"
 
 namespace TE
 {
@@ -6,7 +7,7 @@ namespace TE
     class VertexArray;
     class VertexBufferLayout;
     
-    class VertexArray
+    class TE_API VertexArray
     {
     public:
         VertexArray();

@@ -50,7 +50,7 @@ namespace TE
     {
         shader.Bind();
         vertexArray.Bind();
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawArrays(GL_TRUE, 0, 36);
     }
 
     void APIENTRY glDebugOutput(GLenum source, 

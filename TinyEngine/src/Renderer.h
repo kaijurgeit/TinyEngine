@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-
+#include "Core.h"
 
 namespace TE
 {
@@ -8,7 +8,7 @@ namespace TE
     class IndexBuffer;
     class VertexArray;
     
-    class Renderer
+    class TE_API Renderer
     {
     public:
         Renderer();

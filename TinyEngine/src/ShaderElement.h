@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+#include "Core.h"
+
 namespace TE
 {
     class ShaderElement
