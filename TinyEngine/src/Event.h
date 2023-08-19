@@ -13,7 +13,6 @@ enum class ETriggerEvent
 class Event
 {
 public:
-    virtual ~Event() = default;
     virtual std::string ToString() const = 0;
 };
 
@@ -40,7 +39,8 @@ public:
         ss << "InputEvent: " << triggerEventStr << Key;
         return ss.str();
     }
-    
+
+private:
     int Key;
     ETriggerEvent TriggerEvent;
 };

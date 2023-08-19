@@ -13,8 +13,16 @@ namespace TE
     class TE_API Shader
     {
     public:
+
         Shader(std::vector<ShaderElement> shaders);
+        Shader(const Shader& other) = default;
+        Shader(Shader&& other) noexcept = default;
+        Shader& operator=(const Shader& other) = default;
+        Shader& operator=(Shader&& other) noexcept = default;
         ~Shader();
+
+        void Foo() { ; }
+        
         unsigned int Create();
         void Bind() const;
         void Unbind() const;

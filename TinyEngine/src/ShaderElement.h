@@ -2,21 +2,23 @@
 #include <string>
 
 #include "Core.h"
+#include "Shader.h"
 
 namespace TE
-{
-    class ShaderElement
+{   
+    class TE_API ShaderElement
     {
+        friend class Shader;
     public:
-        unsigned int Type;
-        unsigned int Id;
-        std::string Source;
-    
         ShaderElement(unsigned int type, const char* path);
         unsigned int Compile();
     
     private:
         void ShaderElement::LogDeleteIfCompilationFails();
+        
+        unsigned int Type;
+        unsigned int Id;
+        std::string Source;
     };
     
 }

@@ -10,16 +10,28 @@ namespace TE
 {
     class TE_API Window
     {
-    public:        
+    public:
+        Window(const char* title, int width, int height);
+        Window(const Window& other) = default;
+        Window(Window&& other) noexcept = default;
+        Window& operator=(const Window& other) = default;
+        Window& operator=(Window&& other) noexcept = default;
+        ~Window();
+
         void InitWindow(const char* title, int width, int height);
         void InitCallbacks();
-        Window(const char* title, int width, int height);
-        ~Window();
         void OnUpdate();
         bool ShouldClose();
+
+        std::string GetTitle() const { return Title; }
+        int GetWidth() const { return Width; }
+        int GetHeight() const { return Height; }
+        
+        void SetEventCallback(const std::function<void(Event&)>& eventCallback) { EventCallback = eventCallback; }
         
         GLFWwindow* GlfwWindow;
 
+    private:
         std::string Title;
         int Width;
         int Height;

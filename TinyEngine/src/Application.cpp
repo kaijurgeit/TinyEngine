@@ -36,7 +36,7 @@ namespace TE
     Application::Application()    
     {
         Window = std::make_unique<TE::Window>("TinyEngine App", 800, 600);
-        Window->EventCallback = std::bind(&Application::OnEvent, this, std::placeholders::_1);
+        Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
         Renderer = std::make_unique<TE::Renderer>();
         
         glfwSetCursorPosCallback(Window->GlfwWindow, mouse_callback);
@@ -56,7 +56,7 @@ namespace TE
         // viewer matrix transformations
         glm::mat4 projection = glm::perspective(
             glm::radians(45.f),
-            static_cast<float>(Window->Width) / static_cast<float>(Window->Height),
+            static_cast<float>(Window->GetWidth()) / static_cast<float>(Window->GetHeight()),
         0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 model = glm::mat4(1.0f);
@@ -110,7 +110,7 @@ namespace TE
             
             glm::mat4 projection = glm::perspective(
                     glm::radians(45.f),
-                    static_cast<float>(Window->Width) / static_cast<float>(Window->Height),
+                    static_cast<float>(Window->GetWidth()) / static_cast<float>(Window->GetHeight()),
                 0.1f, 100.0f);
             glm::mat4 view = camera.GetViewMatrix();
 
