@@ -53,12 +53,43 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(glm)
 
-set(Solution_Folder "vendor")
-set_target_properties(glad PROPERTIES FOLDER ${Solution_Folder})
-set_target_properties(glfw PROPERTIES FOLDER ${Solution_Folder})
-set_target_properties(stbimage PROPERTIES FOLDER ${Solution_Folder})
-set_target_properties(glm PROPERTIES FOLDER ${Solution_Folder})
 
+
+#--------------------------------------------------------------------
+# Open Asset Import Library (assimp)
+#--------------------------------------------------------------------
+FetchContent_Declare(
+    assimp
+    GIT_REPOSITORY https://github.com/assimp/assimp
+    GIT_TAG 9519a62dd20799c5493c638d1ef5a6f484e5faf1    # 5.2.5
+)
+FetchContent_MakeAvailable(assimp)
+
+set(GLFW_BUILD_DOCS OFF)
+set(ASSIMP_BUILD_DOCS OFF)
+
+set(Solution_Folder "vendor")
 if(TARGET glad-generate-files)    
     set_target_properties(glad-generate-files PROPERTIES FOLDER ${Solution_Folder})
+endif()
+if(TARGET glad)    
+    set_target_properties(glad PROPERTIES FOLDER ${Solution_Folder})
+endif()
+if(TARGET glfw)    
+    set_target_properties(glfw PROPERTIES FOLDER ${Solution_Folder})
+endif()
+if(TARGET stbimage)    
+    set_target_properties(stbimage PROPERTIES FOLDER ${Solution_Folder})
+endif()
+if(TARGET glm)    
+    set_target_properties(glm PROPERTIES FOLDER ${Solution_Folder})
+endif()
+if(TARGET unit)    
+    set_target_properties(unit PROPERTIES FOLDER ${Solution_Folder})
+endif()
+if(TARGET assimp)    
+    set_target_properties(assimp PROPERTIES FOLDER ${Solution_Folder})
+endif()
+if(TARGET UpdateAssimpLibsDebugSymbolsAndDLLs)    
+    set_target_properties(UpdateAssimpLibsDebugSymbolsAndDLLs PROPERTIES FOLDER ${Solution_Folder})
 endif()

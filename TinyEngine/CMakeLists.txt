@@ -17,6 +17,10 @@ set(SRC_FILES
     IndexBuffer.h
     IndexBuffer.cpp
     Main.h
+    Mesh.cpp
+    Mesh.h
+    Model.cpp
+    Model.h
     Renderer.h
     Renderer.cpp
     Shader.h
@@ -59,7 +63,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     glad
     glfw
     stbimage
-    glm
+    glm    
+    assimp
 )
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
