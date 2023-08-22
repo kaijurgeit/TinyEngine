@@ -37,6 +37,8 @@ list(TRANSFORM SRC_FILES PREPEND "src/")
 set(SHADER_FILES
     Light.frag
     Light.vert
+    Texture.frag
+    Texture.vert
 )
 list(TRANSFORM SHADER_FILES PREPEND "shaders/")
 

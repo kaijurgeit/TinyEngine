@@ -13,13 +13,13 @@ namespace TE
         Texture& operator=(const Texture&) = default;
         Texture& operator=(Texture&&) = default;
 
-        void Bind() const;
+        void Bind(unsigned int slot = 0) const;
         void Unbind() const;
         
     private:
         unsigned int Id;
-        std::string FilePath;
-        unsigned char* LocalBuffer = nullptr;
+        std::string Path;
+        unsigned char* Buffer = nullptr;
         int Width = 0;
         int Height = 0;
         int ChannelCount = 0;

@@ -30,7 +30,7 @@ namespace TE
         void SetUniform(const std::string &name, int value) const;
         void SetUniform(const std::string &name, float value) const;
         void SetUniform(const std::string &name, const glm::vec2 &value) const;
-        void SetUniform(const std::string &name, float x, float y) const;
+        void SetUniform(const std::string &name, float x, float y) const; 
         void SetUniform(const std::string &name, const glm::vec3 &value) const;
         void SetUniform(const std::string &name, float x, float y, float z) const;
         void SetUniform(const std::string &name, const glm::vec4 &value) const;

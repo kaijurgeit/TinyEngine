@@ -10,6 +10,7 @@
 #include "ShaderElement.h"
 #include "Shader.h"
 #include "FileSystem.h"
+#include "Texture.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
@@ -70,8 +71,8 @@ namespace TE
         
         // build and compile Shaders
         Shader light( {
-            ShaderElement(GL_VERTEX_SHADER, (Path + "Shaders/Light.vert").c_str()),
-            ShaderElement(GL_FRAGMENT_SHADER, (Path + "Shaders/Light.frag").c_str())});
+            ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Light.vert").c_str()),
+            ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Light.frag").c_str())});
         light.Create();
         light.Bind();
 #pragma endregion light
@@ -80,10 +81,13 @@ namespace TE
         constexpr glm::vec3 texCubePos(1.0f, 0.5f, 1.0f);
 
         Shader texCube( {
-            ShaderElement(GL_VERTEX_SHADER, (Path + "Shaders/Light.vert").c_str()),
-            ShaderElement(GL_FRAGMENT_SHADER, (Path + "Shaders/Light.frag").c_str())});
+            ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Texture.vert").c_str()),
+            ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Texture.frag").c_str())});
         texCube.Create();
-        texCube.Bind();        
+        texCube.Bind();
+        texCube.SetUniform("texture0", 0);
+
+        Texture texture((Path + "resources/textures/container.jpg").c_str()); 
 #pragma endregion texCube        
 
         VertexArray va;
@@ -94,6 +98,7 @@ namespace TE
         layout.Add<float>(2);
         va.Bind();
         va.AddBuffer(vb, layout);
+
         
         while (true)
         {
@@ -119,6 +124,7 @@ namespace TE
             model = glm::translate(model, lightPos);
             model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
 
+            light.Bind();
             light.SetUniform("projection", projection);
             light.SetUniform("view", view);
             light.SetUniform("model", model);
@@ -129,6 +135,7 @@ namespace TE
             model = glm::translate(model, texCubePos);
             model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
 
+            texCube.Bind();
             texCube.SetUniform("projection", projection);
             texCube.SetUniform("view", view);
             texCube.SetUniform("model", model);
