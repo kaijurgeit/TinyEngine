@@ -21,6 +21,8 @@ set(SRC_FILES
     Renderer.cpp
     Shader.h
     Shader.cpp
+    Texture.cpp
+    Texture.h
     ShaderElement.h
     ShaderElement.cpp
     TinyEngine.h
