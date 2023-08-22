@@ -95,8 +95,26 @@ namespace TE
         texCube.SetUniform("model", model);
         texCube.SetUniform("texture0", 0);
 
-        Texture texture((Path + "resources/textures/container.jpg").c_str()); 
+        Texture albedo((Path + "resources/textures/container.jpg").c_str()); 
 #pragma endregion texCube
+
+#pragma region phongCube
+        constexpr glm::vec3 phongCubePos(0.0f, 0.0f, 0.0f);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, phongCubePos);
+        model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
+
+        Shader phongCube( {
+            ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Phong.vert").c_str()),
+            ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Phong.frag").c_str())});
+        phongCube.Create();
+        phongCube.Bind();
+        phongCube.SetUniform("projection", projection);
+        phongCube.SetUniform("model", model);
+        
+        // Texture diffuseMap((Path + "resources/textures/container2.png").c_str()); 
+#pragma endregion phongCube
+        
         VertexArray va;
         VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
         
@@ -129,6 +147,10 @@ namespace TE
             texCube.Bind();
             texCube.SetUniform("view", view);
             Renderer->Draw(va, texCube);
+
+            phongCube.Bind();
+            phongCube.SetUniform("view", view);
+            Renderer->Draw(va, phongCube);
             
             // glDisable(GL_FALSE);     // uncomment to check debug
             Window->OnUpdate();               
