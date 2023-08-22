@@ -59,12 +59,13 @@ namespace TE
             glm::radians(45.f),
             static_cast<float>(Window->GetWidth()) / static_cast<float>(Window->GetHeight()),
         0.1f, 100.0f);
-        glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 model = glm::mat4(1.0f);
 #pragma endregion camera
         
 #pragma region light
-        constexpr glm::vec3 lightPos(0.5f);
+        constexpr glm::vec3 lightPos(1.0f, 0.5f, 1.0f);
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
         
         // load cube vertex data
         const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex_normals.txt").c_str());
@@ -75,21 +76,27 @@ namespace TE
             ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Light.frag").c_str())});
         light.Create();
         light.Bind();
+        light.SetUniform("projection", projection);
+        light.SetUniform("model", model);
 #pragma endregion light
 
 #pragma region texCube
-        constexpr glm::vec3 texCubePos(1.0f, 0.5f, 1.0f);
+        constexpr glm::vec3 texCubePos(0.5f, 1.0f, 0.5f);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, texCubePos);
+        model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
 
         Shader texCube( {
             ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Texture.vert").c_str()),
             ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Texture.frag").c_str())});
         texCube.Create();
         texCube.Bind();
+        texCube.SetUniform("projection", projection);
+        texCube.SetUniform("model", model);
         texCube.SetUniform("texture0", 0);
 
         Texture texture((Path + "resources/textures/container.jpg").c_str()); 
-#pragma endregion texCube        
-
+#pragma endregion texCube
         VertexArray va;
         VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
         
@@ -113,36 +120,15 @@ namespace TE
             // -----
             processInput(Window->GlfwWindow);
             Renderer->Clear();
-            
-            glm::mat4 projection = glm::perspective(
-                    glm::radians(45.f),
-                    static_cast<float>(Window->GetWidth()) / static_cast<float>(Window->GetHeight()),
-                0.1f, 100.0f);
             glm::mat4 view = camera.GetViewMatrix();
 
-#pragma region render_light            
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, lightPos);
-            model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-
             light.Bind();
-            light.SetUniform("projection", projection);
             light.SetUniform("view", view);
-            light.SetUniform("model", model);
-
             Renderer->Draw(va, light);
-#pragma endregion render_light
-#pragma region render_texCube
-            model = glm::translate(model, texCubePos);
-            model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-
+            
             texCube.Bind();
-            texCube.SetUniform("projection", projection);
             texCube.SetUniform("view", view);
-            texCube.SetUniform("model", model);
-
             Renderer->Draw(va, texCube);
-#pragma endregion render_texCube
             
             // glDisable(GL_FALSE);     // uncomment to check debug
             Window->OnUpdate();               
