@@ -10,6 +10,7 @@
 #include "ShaderElement.h"
 #include "Shader.h"
 #include "FileSystem.h"
+#include "Model.h"
 #include "Texture.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
@@ -178,6 +179,20 @@ namespace TE
         Texture diffuseMap((Path + "resources/textures/container2.png").c_str()); 
         Texture specularMap((Path + "resources/textures/container2_specular.png").c_str()); 
 #pragma endregion phongCube
+
+#pragma region Model
+        Shader ourShader( {
+            ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Model.vert").c_str()),
+            ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Model.frag").c_str())});
+        ourShader.Create();
+        
+        Model ourModel((Path + "resources/objects/cyborg/cyborg.obj").c_str());
+        
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        ourShader.SetUniform("model", model);
+#pragma endregion Model
         
         VertexArray va;
         VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
@@ -230,6 +245,8 @@ namespace TE
             phongCube.SetUniform("spotLight.position", camera.GetPosition());
             phongCube.SetUniform("spotLight.direction", camera.GetFront());
             Renderer->Draw(va, phongCube);
+            
+            ourModel.Draw(ourShader);
             
             // glDisable(GL_FALSE);     // uncomment to check debug
             Window->OnUpdate();               

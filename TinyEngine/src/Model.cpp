@@ -170,8 +170,9 @@ namespace TE
             }
             if(!skip)
             {   // if texture hasn't been loaded already, load it
-                const char* full_path = (this->directory + str.C_Str()).c_str();
-                Texture texture(full_path);
+                const char* file_name = str.C_Str();
+                std::string full_path = this->directory + "/" + file_name;
+                Texture texture(full_path.c_str());
                 texture.Type = typeName;
                 texture.Path = str.C_Str();
                 textures.push_back(texture);
