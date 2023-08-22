@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "ShaderElement.h"
 #include "glad/glad.h"
 #include <glm/glm.hpp>
 

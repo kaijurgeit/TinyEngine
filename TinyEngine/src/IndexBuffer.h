@@ -14,7 +14,7 @@ namespace TE
         void Bind() const;
         void Unbind() const;
 
-        inline unsigned int GetCount() const { return Count; }
+        unsigned int GetCount() const { return Count; }
         
     private:
         unsigned int Id;

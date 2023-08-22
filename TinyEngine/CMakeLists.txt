@@ -21,6 +21,8 @@ set(SRC_FILES
     Renderer.cpp
     Shader.h
     Shader.cpp
+    Texture.cpp
+    Texture.h
     ShaderElement.h
     ShaderElement.cpp
     TinyEngine.h
@@ -37,6 +39,8 @@ list(TRANSFORM SRC_FILES PREPEND "src/")
 set(SHADER_FILES
     Light.frag
     Light.vert
+    Texture.frag
+    Texture.vert
 )
 list(TRANSFORM SHADER_FILES PREPEND "shaders/")
 

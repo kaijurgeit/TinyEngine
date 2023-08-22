@@ -13,8 +13,16 @@ namespace TE
     class TE_API Shader
     {
     public:
+
         Shader(std::vector<ShaderElement> shaders);
+        Shader(const Shader& other) = default;
+        Shader(Shader&& other) noexcept = default;
+        Shader& operator=(const Shader& other) = default;
+        Shader& operator=(Shader&& other) noexcept = default;
         ~Shader();
+
+        void Foo() { ; }
+        
         unsigned int Create();
         void Bind() const;
         void Unbind() const;
@@ -22,7 +30,7 @@ namespace TE
         void SetUniform(const std::string &name, int value) const;
         void SetUniform(const std::string &name, float value) const;
         void SetUniform(const std::string &name, const glm::vec2 &value) const;
-        void SetUniform(const std::string &name, float x, float y) const;
+        void SetUniform(const std::string &name, float x, float y) const; 
         void SetUniform(const std::string &name, const glm::vec3 &value) const;
         void SetUniform(const std::string &name, float x, float y, float z) const;
         void SetUniform(const std::string &name, const glm::vec4 &value) const;
