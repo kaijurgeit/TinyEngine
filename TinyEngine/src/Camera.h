@@ -27,12 +27,8 @@ const float ZOOM        =  45.0f;
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class TE_API Camera
 {
-
 public:
-
-    // constructor with vectors
     Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
-    // constructor with scalar values
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
     
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
@@ -47,12 +43,18 @@ public:
     // processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
     void ProcessMouseScroll(float yoffset);
 
+    glm::vec3 GetPosition() const { return Position; }
+    glm::vec3 GetFront() const { return Front; }
+    glm::vec3 GetUp() const { return Up; }
+    glm::vec3 GetRight() const { return Right; }
+
 private:
     // calculates the front vector from the Camera's (updated) Euler Angles
     void UpdateCameraVectors();
     
     // camera Attributes
     glm::vec3 Position;
+    
     glm::vec3 Front;
     glm::vec3 Up;
     glm::vec3 Right;
