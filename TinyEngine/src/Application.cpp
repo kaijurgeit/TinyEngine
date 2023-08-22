@@ -67,7 +67,7 @@ namespace TE
         constexpr glm::vec3 lightPos(0.5f);
         
         // load cube vertex data
-        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex.txt").c_str());
+        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex_normals.txt").c_str());
         
         // build and compile Shaders
         Shader light( {
@@ -94,6 +94,7 @@ namespace TE
         VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
         
         VertexBufferLayout layout;
+        layout.Add<float>(3);
         layout.Add<float>(3);
         layout.Add<float>(2);
         va.Bind();
