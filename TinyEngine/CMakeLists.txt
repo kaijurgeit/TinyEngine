@@ -41,6 +41,8 @@ set(SHADER_FILES
     Light.vert
     Texture.frag
     Texture.vert
+    Phong.frag
+    Phong.vert
 )
 list(TRANSFORM SHADER_FILES PREPEND "shaders/")
 
