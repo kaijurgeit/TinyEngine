@@ -191,6 +191,7 @@ namespace TE
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        ourShader.Bind();
         ourShader.SetUniform("model", model);
 #pragma endregion Model
         
@@ -245,7 +246,7 @@ namespace TE
             phongCube.SetUniform("spotLight.position", camera.GetPosition());
             phongCube.SetUniform("spotLight.direction", camera.GetFront());
             Renderer->Draw(va, phongCube);
-            
+
             ourModel.Draw(ourShader);
             
             // glDisable(GL_FALSE);     // uncomment to check debug

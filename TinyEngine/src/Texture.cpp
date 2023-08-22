@@ -47,7 +47,7 @@ namespace TE
 
     Texture::~Texture()
     {
-        glDeleteTextures(1, &Id);
+        // glDeleteTextures(1, &Id);
     }
 
     void Texture::Bind(unsigned int slot) const
