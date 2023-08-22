@@ -122,8 +122,8 @@ namespace TE
         phongCube.SetUniform("projection", projection);
         phongCube.SetUniform("model", model);
 
-        phongCube.SetUniform("material.diffuse", 0);
-        phongCube.SetUniform("material.specular", 1);
+        phongCube.SetUniform("material.diffuse", 1);
+        phongCube.SetUniform("material.specular", 2);
                 // be sure to activate shader when setting uniforms/drawing objects
         
         phongCube.SetUniform("material.shininess", 32.0f);
@@ -164,9 +164,8 @@ namespace TE
         phongCube.SetUniform("pointLights[3].constant", 1.0f);
         phongCube.SetUniform("pointLights[3].linear", 0.09f);
         phongCube.SetUniform("pointLights[3].quadratic", 0.032f);
+        
         // spotLight
-        phongCube.SetUniform("spotLight.position", camera.GetPosition());
-        phongCube.SetUniform("spotLight.direction", camera.GetFront());
         phongCube.SetUniform("spotLight.ambient", 0.0f, 0.0f, 0.0f);
         phongCube.SetUniform("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
         phongCube.SetUniform("spotLight.specular", 1.0f, 1.0f, 1.0f);
@@ -177,7 +176,7 @@ namespace TE
         phongCube.SetUniform("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
         
         Texture diffuseMap((Path + "resources/textures/container2.png").c_str()); 
-        Texture specularMap((Path + "resources/textures/container2.png").c_str()); 
+        Texture specularMap((Path + "resources/textures/container2_specular.png").c_str()); 
 #pragma endregion phongCube
         
         VertexArray va;
@@ -204,22 +203,23 @@ namespace TE
             processInput(Window->GlfwWindow);
             Renderer->Clear();
             glm::mat4 view = camera.GetViewMatrix();
-
+            
+            albedo.Bind(0);
+            diffuseMap.Bind(1);
+            specularMap.Bind(2);
 
             light.Bind();
             light.SetUniform("view", view);
             Renderer->Draw(va, light);
-            for (unsigned int i = 0; i < 4; i++)
-            {
-                model = glm::mat4(1.0f);
-                model = glm::translate(model, pointLightPositions[i]);
-                model = glm::scale(model, glm::vec3(0.2f));                
-                light.SetUniform("model", model);
-                Renderer->Draw(va, light);
-            }
+            // for (unsigned int i = 0; i < 4; i++)
+            // {
+            //     model = glm::mat4(1.0f);
+            //     model = glm::translate(model, pointLightPositions[i]);
+            //     model = glm::scale(model, glm::vec3(0.2f));                
+            //     light.SetUniform("model", model);
+            //     Renderer->Draw(va, light);
+            // }
             
-            albedo.Bind();
-            diffuseMap.Bind();
             texCube.Bind();
             texCube.SetUniform("view", view);
             Renderer->Draw(va, texCube);
@@ -227,6 +227,8 @@ namespace TE
             phongCube.Bind();
             phongCube.SetUniform("view", view);            
             phongCube.SetUniform("viewPos", camera.GetPosition());
+            phongCube.SetUniform("spotLight.position", camera.GetPosition());
+            phongCube.SetUniform("spotLight.direction", camera.GetFront());
             Renderer->Draw(va, phongCube);
             
             // glDisable(GL_FALSE);     // uncomment to check debug
