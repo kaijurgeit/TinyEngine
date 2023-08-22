@@ -59,15 +59,16 @@ namespace TE
             glm::radians(45.f),
             static_cast<float>(Window->GetWidth()) / static_cast<float>(Window->GetHeight()),
         0.1f, 100.0f);
-        glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 model = glm::mat4(1.0f);
 #pragma endregion camera
         
 #pragma region light
-        constexpr glm::vec3 lightPos(0.5f);
+        constexpr glm::vec3 lightPos(1.0f, 0.5f, 1.0f);
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
         
         // load cube vertex data
-        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex.txt").c_str());
+        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex_normals.txt").c_str());
         
         // build and compile Shaders
         Shader light( {
@@ -75,25 +76,114 @@ namespace TE
             ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Light.frag").c_str())});
         light.Create();
         light.Bind();
+        light.SetUniform("projection", projection);
+        light.SetUniform("model", model);
 #pragma endregion light
 
 #pragma region texCube
-        constexpr glm::vec3 texCubePos(1.0f, 0.5f, 1.0f);
+        constexpr glm::vec3 texCubePos(0.5f, 1.0f, 0.5f);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, texCubePos);
+        model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
 
         Shader texCube( {
             ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Texture.vert").c_str()),
             ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Texture.frag").c_str())});
         texCube.Create();
         texCube.Bind();
+        texCube.SetUniform("projection", projection);
+        texCube.SetUniform("model", model);
         texCube.SetUniform("texture0", 0);
 
-        Texture texture((Path + "resources/textures/container.jpg").c_str()); 
-#pragma endregion texCube        
+        Texture albedo((Path + "resources/textures/container.jpg").c_str()); 
+#pragma endregion texCube
 
+#pragma region PointLights
+            // positions of the point lights
+    glm::vec3 pointLightPositions[] = {
+        glm::vec3( 0.7f,  0.2f,  2.0f),
+        glm::vec3( 2.3f, -3.3f, -4.0f),
+        glm::vec3(-4.0f,  2.0f, -12.0f),
+        glm::vec3( 0.0f,  0.0f, -3.0f)
+    };
+#pragma endregion PointLights
+        
+#pragma region phongCube
+        constexpr glm::vec3 phongCubePos(0.0f, 0.0f, 0.0f);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, phongCubePos);
+        model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
+
+        Shader phongCube( {
+            ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Phong.vert").c_str()),
+            ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Phong.frag").c_str())});
+        phongCube.Create();
+        phongCube.Bind();
+        phongCube.SetUniform("projection", projection);
+        phongCube.SetUniform("model", model);
+
+        phongCube.SetUniform("material.diffuse", 1);
+        phongCube.SetUniform("material.specular", 2);
+                // be sure to activate shader when setting uniforms/drawing objects
+        
+        phongCube.SetUniform("material.shininess", 32.0f);
+
+        phongCube.SetUniform("dirLight.direction", -0.2f, -1.0f, -0.3f);
+        phongCube.SetUniform("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+        phongCube.SetUniform("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+        phongCube.SetUniform("dirLight.specular", 0.5f, 0.5f, 0.5f);
+        // point light 1
+        phongCube.SetUniform("pointLights[0].position", pointLightPositions[0]);
+        phongCube.SetUniform("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+        phongCube.SetUniform("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+        phongCube.SetUniform("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+        phongCube.SetUniform("pointLights[0].constant", 1.0f);
+        phongCube.SetUniform("pointLights[0].linear", 0.09f);
+        phongCube.SetUniform("pointLights[0].quadratic", 0.032f);
+        // point light 2
+        phongCube.SetUniform("pointLights[1].position", pointLightPositions[1]);
+        phongCube.SetUniform("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+        phongCube.SetUniform("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+        phongCube.SetUniform("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+        phongCube.SetUniform("pointLights[1].constant", 1.0f);
+        phongCube.SetUniform("pointLights[1].linear", 0.09f);
+        phongCube.SetUniform("pointLights[1].quadratic", 0.032f);
+        // point light 3
+        phongCube.SetUniform("pointLights[2].position", pointLightPositions[2]);
+        phongCube.SetUniform("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+        phongCube.SetUniform("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+        phongCube.SetUniform("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+        phongCube.SetUniform("pointLights[2].constant", 1.0f);
+        phongCube.SetUniform("pointLights[2].linear", 0.09f);
+        phongCube.SetUniform("pointLights[2].quadratic", 0.032f);
+        // point light 4
+        phongCube.SetUniform("pointLights[3].position", pointLightPositions[3]);
+        phongCube.SetUniform("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+        phongCube.SetUniform("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+        phongCube.SetUniform("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+        phongCube.SetUniform("pointLights[3].constant", 1.0f);
+        phongCube.SetUniform("pointLights[3].linear", 0.09f);
+        phongCube.SetUniform("pointLights[3].quadratic", 0.032f);
+        
+        // spotLight
+        phongCube.SetUniform("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+        phongCube.SetUniform("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+        phongCube.SetUniform("spotLight.specular", 1.0f, 1.0f, 1.0f);
+        phongCube.SetUniform("spotLight.constant", 1.0f);
+        phongCube.SetUniform("spotLight.linear", 0.09f);
+        phongCube.SetUniform("spotLight.quadratic", 0.032f);
+        phongCube.SetUniform("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+        phongCube.SetUniform("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+        
+        Texture diffuseMap((Path + "resources/textures/container2.png").c_str()); 
+        Texture specularMap((Path + "resources/textures/container2_specular.png").c_str()); 
+#pragma endregion phongCube
+        
         VertexArray va;
         VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
         
         VertexBufferLayout layout;
+        layout.Add<float>(3);
         layout.Add<float>(3);
         layout.Add<float>(2);
         va.Bind();
@@ -112,36 +202,34 @@ namespace TE
             // -----
             processInput(Window->GlfwWindow);
             Renderer->Clear();
-            
-            glm::mat4 projection = glm::perspective(
-                    glm::radians(45.f),
-                    static_cast<float>(Window->GetWidth()) / static_cast<float>(Window->GetHeight()),
-                0.1f, 100.0f);
             glm::mat4 view = camera.GetViewMatrix();
-
-#pragma region render_light            
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, lightPos);
-            model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+            
+            albedo.Bind(0);
+            diffuseMap.Bind(1);
+            specularMap.Bind(2);
 
             light.Bind();
-            light.SetUniform("projection", projection);
             light.SetUniform("view", view);
-            light.SetUniform("model", model);
-
             Renderer->Draw(va, light);
-#pragma endregion render_light
-#pragma region render_texCube
-            model = glm::translate(model, texCubePos);
-            model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-
+            // for (unsigned int i = 0; i < 4; i++)
+            // {
+            //     model = glm::mat4(1.0f);
+            //     model = glm::translate(model, pointLightPositions[i]);
+            //     model = glm::scale(model, glm::vec3(0.2f));                
+            //     light.SetUniform("model", model);
+            //     Renderer->Draw(va, light);
+            // }
+            
             texCube.Bind();
-            texCube.SetUniform("projection", projection);
             texCube.SetUniform("view", view);
-            texCube.SetUniform("model", model);
-
             Renderer->Draw(va, texCube);
-#pragma endregion render_texCube
+
+            phongCube.Bind();
+            phongCube.SetUniform("view", view);            
+            phongCube.SetUniform("viewPos", camera.GetPosition());
+            phongCube.SetUniform("spotLight.position", camera.GetPosition());
+            phongCube.SetUniform("spotLight.direction", camera.GetFront());
+            Renderer->Draw(va, phongCube);
             
             // glDisable(GL_FALSE);     // uncomment to check debug
             Window->OnUpdate();               
