@@ -27,5 +27,6 @@ namespace TE
     void Material::Bind()
     {
         shader->Bind();
+        shader->SetUniform("color", data.BaseColor);
     }
 }

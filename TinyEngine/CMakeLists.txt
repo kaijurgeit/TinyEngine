@@ -17,6 +17,8 @@ set(SRC_FILES
     IndexBuffer.h
     IndexBuffer.cpp
     Main.h
+    Material.cpp
+    Material.h
     Mesh.cpp
     Mesh.h
     Model.cpp
@@ -41,12 +43,16 @@ set(SRC_FILES
 list(TRANSFORM SRC_FILES PREPEND "src/")
 
 set(SHADER_FILES
+    Flat.frag
+    Flat.vert
     Light.frag
     Light.vert
-    Texture.frag
-    Texture.vert
+    Model.frag
+    Model.vert
     Phong.frag
     Phong.vert
+    Texture.frag
+    Texture.vert
 )
 list(TRANSFORM SHADER_FILES PREPEND "shaders/")
 

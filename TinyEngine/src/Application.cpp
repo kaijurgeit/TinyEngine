@@ -92,14 +92,32 @@ namespace TE
         light.SetUniform("model", model);
 #pragma endregion light
 
-#pragma region redCube
         Shader flat( {
             ShaderElement(GL_VERTEX_SHADER, Path + "shaders/Flat.vert"),
             ShaderElement(GL_FRAGMENT_SHADER, Path + "shaders/Flat.frag")});
-        Material flatRed(&flat, glm::vec4(1.0, 0.0, 0.0, 1.0));
-        Mesh redCube(&va, &flatRed, projection);
         
-#pragma endregion redCube
+#pragma region flatCubes
+        Material flatRed(&flat, glm::vec4(1.0, 0.0, 0.0, 1.0));
+        Mesh redCube = Mesh::CreateCube(&va, &flatRed, projection, glm::vec3(1.0f, 0.5f, 0.5f), 0.2);
+        
+        Material flatGreen(&flat, glm::vec4(0.0, 1.0, 0.0, 1.0));
+        Mesh greenCube = Mesh::CreateCube(&va, &flatGreen, projection, glm::vec3(1.0f, 0.5f, 1.0f), 0.2);
+        
+        Material flatBlue(&flat, glm::vec4(0.0, 0.0, 1.0, 1.0));
+        Mesh blueCube = Mesh::CreateCube(&va, &flatBlue, projection, glm::vec3(1.0f, 0.5f, 1.5f), 0.2);
+        
+        Material flatYellow(&flat, glm::vec4(1.0, 1.0, 0.0, 1.0));
+        Mesh yellowCube = Mesh::CreateCube(&va, &flatYellow, projection, glm::vec3(1.0f, 0.5f, 2.0f), 0.2);
+        
+        Material flatCyan(&flat, glm::vec4(0.0, 1.0, 1.0, 1.0));
+        Mesh cyanCube = Mesh::CreateCube(&va, &flatCyan, projection, glm::vec3(1.0f, 0.5f, 2.5f), 0.2);
+        
+        Material flatMagenta(&flat, glm::vec4(1.0, 0.0, 1.0, 1.0));
+        Mesh magentaCube = Mesh::CreateCube(&va, &flatMagenta, projection, glm::vec3(1.0f, 0.5f, 3.0f), 0.2);
+        
+        Material flatWhite(&flat, glm::vec4(1.0, 1.0, 1.0, 1.0));
+        Mesh whiteCube = Mesh::CreateCube(&va, &flatWhite, projection, glm::vec3(1.0f, 0.5f, 3.5f), 0.2);        
+#pragma endregion flatCubes
 
 #pragma region texCube
         constexpr glm::vec3 texCubePos(0.5f, 1.0f, 0.5f);
@@ -215,7 +233,6 @@ namespace TE
         ourShader.Bind();
         ourShader.SetUniform("model", model);
 #pragma endregion Model
-
         
         while (true)
         {
@@ -232,14 +249,18 @@ namespace TE
             glm::mat4 view = camera.GetViewMatrix();
 
             redCube.Draw(view);
+            greenCube.Draw(view);
+            blueCube.Draw(view);
+            yellowCube.Draw(view);
+            cyanCube.Draw(view);
+            magentaCube.Draw(view);
+            whiteCube.Draw(view);
             
             albedo.Bind(0);
             diffuseMap.Bind(1);
             specularMap.Bind(2);
 
-            light.Bind();
-            light.SetUniform("view", view);
-            Renderer->Draw(va, light);
+            
             // for (unsigned int i = 0; i < 4; i++)
             // {
             //     model = glm::mat4(1.0f);

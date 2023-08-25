@@ -14,10 +14,10 @@ namespace TE
     class Material
     {
     public:
-        void Create();
         Material(Shader* shader, glm::vec4 baseColor);
         Material(Shader* shader, MaterialData data);
 
+        void Create();
         void Bind();
         
         Shader* GetShader() const { return shader; }

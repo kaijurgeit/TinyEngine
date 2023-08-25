@@ -8,10 +8,9 @@
 
 namespace TE
 {
-    Mesh::Mesh(VertexArray* vao, Material* material, glm::mat4 projection, glm::vec3 position)
-        : Vao(vao), material(material), projection(projection)
+    Mesh::Mesh(VertexArray* vao, Material* material, glm::mat4 projection, glm::mat4 model)
+        : Vao(vao), material(material), projection(projection), model(model)
     {
-        model = glm::translate(model, position);
         Shader* shader = material->GetShader();
         shader->Bind();
         shader->SetUniform("model", model);
@@ -24,12 +23,21 @@ namespace TE
         SetupMesh();
     }
 
+    Mesh Mesh::CreateCube(VertexArray* vao, Material* material, glm::mat4 projection, glm::vec3 position, float scale)
+    {
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
+        model = glm::scale(model, glm::vec3(scale)); // a smaller cube
+        return Mesh(vao, material, projection, model);
+    }
+    
     void Mesh::Draw(glm::mat4 view)
     {
         Shader* shader = material->GetShader();
+        material->Bind();
         shader->Bind();
         shader->SetUniform("view", view);
-        Vao->Bind();        
+        Vao->Bind();     
+        shader->SetUniform("model", model);   
         glDrawArrays(GL_TRIANGLES, 0, 36);        
     }
 
