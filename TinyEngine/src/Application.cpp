@@ -198,9 +198,7 @@ namespace TE
         VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
         
         VertexBufferLayout layout;
-        layout.Add<float>(3);
-        layout.Add<float>(3);
-        layout.Add<float>(2);
+        layout.Add<float>({3, 3, 2});
         va.Bind();
         va.AddBuffer(vb, layout);
 

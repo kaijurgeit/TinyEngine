@@ -39,6 +39,15 @@ namespace TE
             static_assert(false);
         }
 
+        template<typename T>
+        void Add(std::vector<unsigned int> counts)
+        {
+            for (unsigned int count : counts)
+            {
+                Add<T>(count);
+            }
+        }
+
         template<>
         void Add<float>(unsigned int count)
         {
