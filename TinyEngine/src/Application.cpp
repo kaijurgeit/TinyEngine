@@ -10,10 +10,12 @@
 #include "ShaderElement.h"
 #include "Shader.h"
 #include "FileSystem.h"
+#include "Model.h"
 #include "Texture.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
+#include "Material.h"
 
 namespace TE
 {
@@ -60,6 +62,17 @@ namespace TE
             static_cast<float>(Window->GetWidth()) / static_cast<float>(Window->GetHeight()),
         0.1f, 100.0f);
 #pragma endregion camera
+
+#pragma region vertexData
+        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex_normals.txt").c_str());
+        VertexArray va;
+        VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
+    
+        VertexBufferLayout layout;
+        layout.Add<float>({3, 3, 2});
+        va.Bind();
+        va.AddBuffer(vb, layout);
+#pragma endregion vertexData
         
 #pragma region light
         constexpr glm::vec3 lightPos(1.0f, 0.5f, 1.0f);
@@ -68,7 +81,6 @@ namespace TE
         model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
         
         // load cube vertex data
-        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex_normals.txt").c_str());
         
         // build and compile Shaders
         Shader light( {
@@ -79,6 +91,33 @@ namespace TE
         light.SetUniform("projection", projection);
         light.SetUniform("model", model);
 #pragma endregion light
+
+        Shader flat( {
+            ShaderElement(GL_VERTEX_SHADER, Path + "shaders/Flat.vert"),
+            ShaderElement(GL_FRAGMENT_SHADER, Path + "shaders/Flat.frag")});
+        
+#pragma region flatCubes
+        Material flatRed(&flat, glm::vec4(1.0, 0.0, 0.0, 1.0));
+        Mesh redCube = Mesh::CreateCube(&va, &flatRed, projection, glm::vec3(1.0f, 0.5f, 0.5f), 0.2);
+        
+        Material flatGreen(&flat, glm::vec4(0.0, 1.0, 0.0, 1.0));
+        Mesh greenCube = Mesh::CreateCube(&va, &flatGreen, projection, glm::vec3(1.0f, 0.5f, 1.0f), 0.2);
+        
+        Material flatBlue(&flat, glm::vec4(0.0, 0.0, 1.0, 1.0));
+        Mesh blueCube = Mesh::CreateCube(&va, &flatBlue, projection, glm::vec3(1.0f, 0.5f, 1.5f), 0.2);
+        
+        Material flatYellow(&flat, glm::vec4(1.0, 1.0, 0.0, 1.0));
+        Mesh yellowCube = Mesh::CreateCube(&va, &flatYellow, projection, glm::vec3(1.0f, 0.5f, 2.0f), 0.2);
+        
+        Material flatCyan(&flat, glm::vec4(0.0, 1.0, 1.0, 1.0));
+        Mesh cyanCube = Mesh::CreateCube(&va, &flatCyan, projection, glm::vec3(1.0f, 0.5f, 2.5f), 0.2);
+        
+        Material flatMagenta(&flat, glm::vec4(1.0, 0.0, 1.0, 1.0));
+        Mesh magentaCube = Mesh::CreateCube(&va, &flatMagenta, projection, glm::vec3(1.0f, 0.5f, 3.0f), 0.2);
+        
+        Material flatWhite(&flat, glm::vec4(1.0, 1.0, 1.0, 1.0));
+        Mesh whiteCube = Mesh::CreateCube(&va, &flatWhite, projection, glm::vec3(1.0f, 0.5f, 3.5f), 0.2);        
+#pragma endregion flatCubes
 
 #pragma region texCube
         constexpr glm::vec3 texCubePos(0.5f, 1.0f, 0.5f);
@@ -178,17 +217,22 @@ namespace TE
         Texture diffuseMap((Path + "resources/textures/container2.png").c_str()); 
         Texture specularMap((Path + "resources/textures/container2_specular.png").c_str()); 
 #pragma endregion phongCube
-        
-        VertexArray va;
-        VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
-        
-        VertexBufferLayout layout;
-        layout.Add<float>(3);
-        layout.Add<float>(3);
-        layout.Add<float>(2);
-        va.Bind();
-        va.AddBuffer(vb, layout);
 
+#pragma region Model
+        
+        Shader ourShader( {
+            ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Model.vert").c_str()),
+            ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Model.frag").c_str())});
+        ourShader.Create();
+        
+        Model ourModel((Path + "resources/objects/cyborg/cyborg.obj").c_str());
+        
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+        ourShader.Bind();
+        ourShader.SetUniform("model", model);
+#pragma endregion Model
         
         while (true)
         {
@@ -203,14 +247,20 @@ namespace TE
             processInput(Window->GlfwWindow);
             Renderer->Clear();
             glm::mat4 view = camera.GetViewMatrix();
+
+            redCube.Draw(view);
+            greenCube.Draw(view);
+            blueCube.Draw(view);
+            yellowCube.Draw(view);
+            cyanCube.Draw(view);
+            magentaCube.Draw(view);
+            whiteCube.Draw(view);
             
             albedo.Bind(0);
             diffuseMap.Bind(1);
             specularMap.Bind(2);
 
-            light.Bind();
-            light.SetUniform("view", view);
-            Renderer->Draw(va, light);
+            
             // for (unsigned int i = 0; i < 4; i++)
             // {
             //     model = glm::mat4(1.0f);
@@ -230,6 +280,8 @@ namespace TE
             phongCube.SetUniform("spotLight.position", camera.GetPosition());
             phongCube.SetUniform("spotLight.direction", camera.GetFront());
             Renderer->Draw(va, phongCube);
+
+            ourModel.Draw(ourShader);
             
             // glDisable(GL_FALSE);     // uncomment to check debug
             Window->OnUpdate();               

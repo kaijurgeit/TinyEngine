@@ -17,6 +17,12 @@ set(SRC_FILES
     IndexBuffer.h
     IndexBuffer.cpp
     Main.h
+    Material.cpp
+    Material.h
+    Mesh.cpp
+    Mesh.h
+    Model.cpp
+    Model.h
     Renderer.h
     Renderer.cpp
     Shader.h
@@ -37,12 +43,16 @@ set(SRC_FILES
 list(TRANSFORM SRC_FILES PREPEND "src/")
 
 set(SHADER_FILES
+    Flat.frag
+    Flat.vert
     Light.frag
     Light.vert
-    Texture.frag
-    Texture.vert
+    Model.frag
+    Model.vert
     Phong.frag
     Phong.vert
+    Texture.frag
+    Texture.vert
 )
 list(TRANSFORM SHADER_FILES PREPEND "shaders/")
 
@@ -59,7 +69,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     glad
     glfw
     stbimage
-    glm
+    glm    
+    assimp
 )
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

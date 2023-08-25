@@ -40,6 +40,7 @@ namespace TE
         void SetUniform(const std::string &name, const glm::mat4 &mat) const;
     
     private:
+        bool created = false;
         unsigned int Id;
         std::vector<ShaderElement> Shaders;
         

@@ -11,14 +11,15 @@ namespace TE
         friend class Shader;
     public:
         ShaderElement(unsigned int type, const char* path);
+        ShaderElement(unsigned int type, std::string path);
         unsigned int Compile();
     
     private:
         void ShaderElement::LogDeleteIfCompilationFails();
         
         unsigned int Type;
-        unsigned int Id;
         std::string Source;
+        unsigned int Id = -1;
     };
     
 }
