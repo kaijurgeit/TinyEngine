@@ -1,9 +1,12 @@
 ﻿#pragma once
 
+#include <memory>
 #include <vector>
 #include <glm/glm.hpp>
 
 #include "Texture.h"
+#include "Material.h"
+
 
 namespace TE
 {    
@@ -17,25 +20,33 @@ namespace TE
     };
 
     class Shader;
+    class VertexArray;
 
     class Mesh
     {
     public:
+        Mesh(VertexArray* vao, Material* material, glm::mat4 projection, glm::vec3 position = glm::vec3(0.0, 0.0, 0.0));
+        Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+        void Draw(glm::mat4 view);
+        void Draw(Shader &shader);
+        
         // mesh data
         std::vector<Vertex>         vertices;
         std::vector<unsigned int>   indices;
         std::vector<Texture>        textures;
-
-        Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
-        void Draw(Shader &shader);
     
     private:
         //  render data
         unsigned int VAO, VBO, EBO;
 
         void SetupMesh();
-    };
-    
+
+    private:
+        VertexArray* Vao;
+        Material* material;
+        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 projection;
+    };    
 }
 
 

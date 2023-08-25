@@ -15,6 +15,7 @@
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
+#include "Material.h"
 
 namespace TE
 {
@@ -61,6 +62,17 @@ namespace TE
             static_cast<float>(Window->GetWidth()) / static_cast<float>(Window->GetHeight()),
         0.1f, 100.0f);
 #pragma endregion camera
+
+#pragma region vertexData
+        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex_normals.txt").c_str());
+        VertexArray va;
+        VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
+    
+        VertexBufferLayout layout;
+        layout.Add<float>({3, 3, 2});
+        va.Bind();
+        va.AddBuffer(vb, layout);
+#pragma endregion vertexData
         
 #pragma region light
         constexpr glm::vec3 lightPos(1.0f, 0.5f, 1.0f);
@@ -69,7 +81,6 @@ namespace TE
         model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
         
         // load cube vertex data
-        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex_normals.txt").c_str());
         
         // build and compile Shaders
         Shader light( {
@@ -80,6 +91,15 @@ namespace TE
         light.SetUniform("projection", projection);
         light.SetUniform("model", model);
 #pragma endregion light
+
+#pragma region redCube
+        Shader flat( {
+            ShaderElement(GL_VERTEX_SHADER, Path + "shaders/Flat.vert"),
+            ShaderElement(GL_FRAGMENT_SHADER, Path + "shaders/Flat.frag")});
+        Material flatRed(&flat, glm::vec4(1.0, 0.0, 0.0, 1.0));
+        Mesh redCube(&va, &flatRed, projection);
+        
+#pragma endregion redCube
 
 #pragma region texCube
         constexpr glm::vec3 texCubePos(0.5f, 1.0f, 0.5f);
@@ -181,6 +201,7 @@ namespace TE
 #pragma endregion phongCube
 
 #pragma region Model
+        
         Shader ourShader( {
             ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Model.vert").c_str()),
             ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Model.frag").c_str())});
@@ -194,14 +215,6 @@ namespace TE
         ourShader.Bind();
         ourShader.SetUniform("model", model);
 #pragma endregion Model
-        
-        VertexArray va;
-        VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
-        
-        VertexBufferLayout layout;
-        layout.Add<float>({3, 3, 2});
-        va.Bind();
-        va.AddBuffer(vb, layout);
 
         
         while (true)
@@ -217,6 +230,8 @@ namespace TE
             processInput(Window->GlfwWindow);
             Renderer->Clear();
             glm::mat4 view = camera.GetViewMatrix();
+
+            redCube.Draw(view);
             
             albedo.Bind(0);
             diffuseMap.Bind(1);

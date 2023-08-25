@@ -1,14 +1,36 @@
 ﻿#include "Mesh.h"
 
+#include <glm/ext/matrix_transform.hpp>
+
 #include "glad/glad.h"
 #include "Shader.h"
+#include "VertexArray.h"
 
 namespace TE
-{    
+{
+    Mesh::Mesh(VertexArray* vao, Material* material, glm::mat4 projection, glm::vec3 position)
+        : Vao(vao), material(material), projection(projection)
+    {
+        model = glm::translate(model, position);
+        Shader* shader = material->GetShader();
+        shader->Bind();
+        shader->SetUniform("model", model);
+        shader->SetUniform("projection", projection);
+    }
+
     Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
         : vertices(vertices), indices(indices), textures(textures)
     {
         SetupMesh();
+    }
+
+    void Mesh::Draw(glm::mat4 view)
+    {
+        Shader* shader = material->GetShader();
+        shader->Bind();
+        shader->SetUniform("view", view);
+        Vao->Bind();        
+        glDrawArrays(GL_TRIANGLES, 0, 36);        
     }
 
     void Mesh::Draw(Shader& program)

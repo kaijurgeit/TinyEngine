@@ -14,8 +14,19 @@ namespace TE
     class Material
     {
     public:
+        void Create();
+        Material(Shader* shader, glm::vec4 baseColor);
+        Material(Shader* shader, MaterialData data);
+
+        void Bind();
+        
+        Shader* GetShader() const { return shader; }
+        MaterialData GetData() const { return data; }
+        void SetData(const MaterialData& data) { this->data = data; }
+        
     private:
-        std::unique_ptr<Shader> Shader;
+        Shader* shader;
+        MaterialData data;
     };    
 }
 

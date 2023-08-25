@@ -13,6 +13,11 @@ namespace TE
         return ReadFileToStringStream(path).str();
     }
 
+    std::string FileSystem::ReadFile(std::string path)
+    {        
+        return ReadFile(path.c_str());
+    }
+
     std::vector<float> FileSystem::FileToFloatVector(const char* path)
     {
         return ParseToFloatVector(ReadFile(path));

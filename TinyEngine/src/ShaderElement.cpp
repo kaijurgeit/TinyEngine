@@ -8,7 +8,12 @@
 namespace TE
 {
     ShaderElement::ShaderElement(unsigned int type, const char* path)
-    : Type(type), Source(TE::FileSystem::ReadFile(path))
+        : Type(type), Source(TE::FileSystem::ReadFile(path))
+    {
+    }
+
+    ShaderElement::ShaderElement(unsigned type, std::string path)
+        : Type(type), Source(TE::FileSystem::ReadFile(path))
     {
     }
 
