@@ -26,7 +26,7 @@ namespace TE
         static Window& GetWindow() { return *Get().window.get(); }
         static Renderer& GetRenderer() { return *Get().renderer.get(); }
         static Camera& GetCamera() { return *Get().camera.get(); }
-        // static glm::mat4 Projection();
+        static glm::mat4 Projection();
         
     private:
         std::unique_ptr<Window> window;

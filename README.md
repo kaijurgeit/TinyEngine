@@ -10,35 +10,45 @@ This repository is written in C++17 and it was tested using CMake 3.11 and Visua
 
 ### Download and Build the Repository
 
-Download the repository:
+#### Download the repository:
 
 ```
 git clone https://github.com/kaijurgeit/TinyEngine.git
 ```
 
-Build the repository. Add `--config <build_type>` to specify a Debug or Release <build_type>:
+#### Build the repository:
+
+Add `--config <build_type>` to specify a Debug or Release <build_type>:
 
 ```
 cmake -S . -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build
 ```
 
-Build with tests enabled:
+#### Build with tests enabled:
 
 ```
 cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBuildTests=ON
 cmake --build build
 ```
 
-Run tests:
+#### Run tests:
 ```
 cd build; ctest -j 10 -C <build_type>
 ```
 
-Run Application:
+#### Run Application:
 ```
 ./build/application/<build_type>/Application.exe
 ```
 
 
 If you'd like to modify and build the *App* together with *TinyEngine* in **Rider**, you have to disable "Use ReSharper Build" under  *Settings → Build, Execution, Deployment → Toolset*. If you don't do this, the dll will not be rebuild. If you'd like to **debug OpenGL** functions place a breakpoint inside the `glDebugOutput` function.
+
+#### Model Loading:
+
+Currently only **OBJ** is supported via [Assimp](https://github.com/assimp/assimp). If you'd like to build Assimp with XXX (e.g. FBX) model support, execute:
+
+```
+cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DASSIMP_BUILD_XXX_IMPORTER=ON
+```

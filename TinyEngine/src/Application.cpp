@@ -40,10 +40,10 @@ namespace TE
     Application::Application()    
     {
         instance = this;
-        window = std::make_unique<TE::Window>("TinyEngine App", 800, 600);
+        window = std::make_unique<Window>("TinyEngine App", 800, 600);
         window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-        renderer = std::make_unique<TE::Renderer>();
-        camera = std::make_unique<TE::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
+        renderer = std::make_unique<Renderer>();
+        camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
         
         glfwSetCursorPosCallback(window->GlfwWindow, mouse_callback);
         glfwSetInputMode(window->GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -60,8 +60,7 @@ namespace TE
         const std::string Path = p.parent_path().parent_path().string() + "/";
 #pragma region camera
         // viewer matrix transformations
-        // glm::mat4 projection = Projection();
-        glm::mat4 projection = glm::mat4(1.0);
+        glm::mat4 projection = Projection();
 #pragma endregion camera
 
 #pragma region vertexData
@@ -99,25 +98,25 @@ namespace TE
         
 #pragma region flatCubes
         Material flatRed(&flat, glm::vec4(1.0, 0.0, 0.0, 1.0));
-        Mesh redCube = Mesh::CreateCube(&va, &flatRed, projection, glm::vec3(1.0f, 0.5f, 0.5f), 0.2);
+        Mesh redCube = Mesh::CreateCube(&va, &flatRed, glm::vec3(1.0f, 0.5f, 0.5f), 0.2);
         
         Material flatGreen(&flat, glm::vec4(0.0, 1.0, 0.0, 1.0));
-        Mesh greenCube = Mesh::CreateCube(&va, &flatGreen, projection, glm::vec3(1.0f, 0.5f, 1.0f), 0.2);
+        Mesh greenCube = Mesh::CreateCube(&va, &flatGreen, glm::vec3(1.0f, 0.5f, 1.0f), 0.2);
         
         Material flatBlue(&flat, glm::vec4(0.0, 0.0, 1.0, 1.0));
-        Mesh blueCube = Mesh::CreateCube(&va, &flatBlue, projection, glm::vec3(1.0f, 0.5f, 1.5f), 0.2);
+        Mesh blueCube = Mesh::CreateCube(&va, &flatBlue, glm::vec3(1.0f, 0.5f, 1.5f), 0.2);
         
         Material flatYellow(&flat, glm::vec4(1.0, 1.0, 0.0, 1.0));
-        Mesh yellowCube = Mesh::CreateCube(&va, &flatYellow, projection, glm::vec3(1.0f, 0.5f, 2.0f), 0.2);
+        Mesh yellowCube = Mesh::CreateCube(&va, &flatYellow, glm::vec3(1.0f, 0.5f, 2.0f), 0.2);
         
         Material flatCyan(&flat, glm::vec4(0.0, 1.0, 1.0, 1.0));
-        Mesh cyanCube = Mesh::CreateCube(&va, &flatCyan, projection, glm::vec3(1.0f, 0.5f, 2.5f), 0.2);
+        Mesh cyanCube = Mesh::CreateCube(&va, &flatCyan, glm::vec3(1.0f, 0.5f, 2.5f), 0.2);
         
         Material flatMagenta(&flat, glm::vec4(1.0, 0.0, 1.0, 1.0));
-        Mesh magentaCube = Mesh::CreateCube(&va, &flatMagenta, projection, glm::vec3(1.0f, 0.5f, 3.0f), 0.2);
+        Mesh magentaCube = Mesh::CreateCube(&va, &flatMagenta, glm::vec3(1.0f, 0.5f, 3.0f), 0.2);
         
         Material flatWhite(&flat, glm::vec4(1.0, 1.0, 1.0, 1.0));
-        Mesh whiteCube = Mesh::CreateCube(&va, &flatWhite, projection, glm::vec3(1.0f, 0.5f, 3.5f), 0.2);        
+        Mesh whiteCube = Mesh::CreateCube(&va, &flatWhite, glm::vec3(1.0f, 0.5f, 3.5f), 0.2);        
 #pragma endregion flatCubes
 
 #pragma region texCube
@@ -298,13 +297,13 @@ namespace TE
         std::cout << "Test Event Callback via Bind - " << event.ToString() << std::endl;  
     }
 
-    // glm::mat4 Application::Projection()
-    // {
-    //     return glm::perspective(
-    //         glm::radians(GetCamera().GetZoom()),
-    //         static_cast<float>(GetWindow().GetWidth()) / static_cast<float>(GetWindow().GetHeight()),
-    //     0.1f, 100.0f);
-    // }
+    glm::mat4 Application::Projection()
+    {
+        return glm::perspective(
+            glm::radians(GetCamera().GetZoom()),
+            static_cast<float>(GetWindow().GetWidth()) / static_cast<float>(GetWindow().GetHeight()),
+        0.1f, 100.0f);
+    }
 
     void processInput(GLFWwindow *window)
     {
