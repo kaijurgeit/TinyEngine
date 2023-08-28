@@ -6,6 +6,9 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build GLFW Tests")
 set(GLFW_INSTALL OFF CACHE BOOL "Build GLFW Install Target")
 set(ASSIMP_BUILD_DOCS OFF CACHE BOOL "Build Assimp Docs")
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "Build Assimp Tests")
+set(ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT OFF CACHE BOOL "Build all Assimp Exporters by default")
+set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "Build all Importers Exporters by default")
+set(ASSIMP_INSTALL OFF CACHE BOOL "Build Assimp Install Target")
 
 
 include(FetchContent)
