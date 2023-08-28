@@ -8,7 +8,6 @@ namespace TE
         : shader(shader)
     {
         data.BaseColor = baseColor;
-        Create();
     }
 
     Material::Material(Shader* shader, MaterialData data)
@@ -16,17 +15,10 @@ namespace TE
     {
         
     }
-    
-    void Material::Create()
+
+    void Material::Update(glm::mat4 mvp)
     {
-        shader->Create();
-        shader->Bind();
-        shader->SetUniform("color", data.BaseColor);
-    }
-    
-    void Material::Bind()
-    {
-        shader->Bind();
+        shader->SetUniform("MVP", mvp);
         shader->SetUniform("color", data.BaseColor);
     }
 }
