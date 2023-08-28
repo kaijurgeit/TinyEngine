@@ -69,8 +69,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     glad
     glfw
     stbimage
-    glm    
     assimp
+)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    glm
 )
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

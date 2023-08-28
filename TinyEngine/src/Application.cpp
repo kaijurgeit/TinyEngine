@@ -1,8 +1,9 @@
 #include "Application.h"
 
-#include <filesystem>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <filesystem>
+#include <glm/fwd.hpp>
 
 #include "Camera.h"
 #include "Renderer.h"
@@ -19,6 +20,7 @@
 
 namespace TE
 {
+    Application* Application::instance = nullptr;
 #pragma region globals
     void mouse_callback(GLFWwindow* window, double xpos, double ypos);
     void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -29,7 +31,6 @@ namespace TE
     float lastFrame = 0.0f;
 
     // camera
-    Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
     float lastX = 400.f;
     float lastY = 300.f;
     bool firstMouse = true;
@@ -38,12 +39,14 @@ namespace TE
 
     Application::Application()    
     {
-        Window = std::make_unique<TE::Window>("TinyEngine App", 800, 600);
-        Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-        Renderer = std::make_unique<TE::Renderer>();
+        instance = this;
+        window = std::make_unique<TE::Window>("TinyEngine App", 800, 600);
+        window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+        renderer = std::make_unique<TE::Renderer>();
+        camera = std::make_unique<TE::Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
         
-        glfwSetCursorPosCallback(Window->GlfwWindow, mouse_callback);
-        glfwSetInputMode(Window->GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetCursorPosCallback(window->GlfwWindow, mouse_callback);
+        glfwSetInputMode(window->GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
     
     Application::~Application()
@@ -57,10 +60,8 @@ namespace TE
         const std::string Path = p.parent_path().parent_path().string() + "/";
 #pragma region camera
         // viewer matrix transformations
-        glm::mat4 projection = glm::perspective(
-            glm::radians(45.f),
-            static_cast<float>(Window->GetWidth()) / static_cast<float>(Window->GetHeight()),
-        0.1f, 100.0f);
+        // glm::mat4 projection = Projection();
+        glm::mat4 projection = glm::mat4(1.0);
 #pragma endregion camera
 
 #pragma region vertexData
@@ -244,9 +245,9 @@ namespace TE
             
             // input
             // -----
-            processInput(Window->GlfwWindow);
-            Renderer->Clear();
-            glm::mat4 view = camera.GetViewMatrix();
+            processInput(window->GlfwWindow);
+            renderer->Clear();
+            glm::mat4 view = camera->GetViewMatrix();
 
             redCube.Draw(view);
             greenCube.Draw(view);
@@ -267,24 +268,24 @@ namespace TE
             //     model = glm::translate(model, pointLightPositions[i]);
             //     model = glm::scale(model, glm::vec3(0.2f));                
             //     light.SetUniform("model", model);
-            //     Renderer->Draw(va, light);
+            //     renderer->Draw(va, light);
             // }
             
             texCube.Bind();
             texCube.SetUniform("view", view);
-            Renderer->Draw(va, texCube);
+            renderer->Draw(va, texCube);
 
             phongCube.Bind();
             phongCube.SetUniform("view", view);            
-            phongCube.SetUniform("viewPos", camera.GetPosition());
-            phongCube.SetUniform("spotLight.position", camera.GetPosition());
-            phongCube.SetUniform("spotLight.direction", camera.GetFront());
-            Renderer->Draw(va, phongCube);
+            phongCube.SetUniform("viewPos", camera->GetPosition());
+            phongCube.SetUniform("spotLight.position", camera->GetPosition());
+            phongCube.SetUniform("spotLight.direction", camera->GetFront());
+            renderer->Draw(va, phongCube);
 
             ourModel.Draw(ourShader);
             
             // glDisable(GL_FALSE);     // uncomment to check debug
-            Window->OnUpdate();               
+            window->OnUpdate();               
         }
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
@@ -297,19 +298,27 @@ namespace TE
         std::cout << "Test Event Callback via Bind - " << event.ToString() << std::endl;  
     }
 
+    // glm::mat4 Application::Projection()
+    // {
+    //     return glm::perspective(
+    //         glm::radians(GetCamera().GetZoom()),
+    //         static_cast<float>(GetWindow().GetWidth()) / static_cast<float>(GetWindow().GetHeight()),
+    //     0.1f, 100.0f);
+    // }
+
     void processInput(GLFWwindow *window)
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
 
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            camera.ProcessKeyboard(FORWARD, deltaTime);
+            Application::GetCamera().ProcessKeyboard(FORWARD, deltaTime);
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            camera.ProcessKeyboard(BACKWARD, deltaTime);
+            Application::GetCamera().ProcessKeyboard(BACKWARD, deltaTime);
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            camera.ProcessKeyboard(LEFT, deltaTime);
+            Application::GetCamera().ProcessKeyboard(LEFT, deltaTime);
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            camera.ProcessKeyboard(RIGHT, deltaTime);
+            Application::GetCamera().ProcessKeyboard(RIGHT, deltaTime);
     }
 
     // glfw: whenever the mouse moves, this callback is called
@@ -332,14 +341,14 @@ namespace TE
         lastX = xpos;
         lastY = ypos;
 
-        camera.ProcessMouseMovement(xoffset, yoffset);
+        Application::GetCamera().ProcessMouseMovement(xoffset, yoffset);
     }
 
     // glfw: whenever the mouse scroll wheel scrolls, this callback is called
     // ----------------------------------------------------------------------
     void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
     {
-        camera.ProcessMouseScroll(static_cast<float>(yoffset));
+        Application::GetCamera().ProcessMouseScroll(static_cast<float>(yoffset));
     }
 }
 

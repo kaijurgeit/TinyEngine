@@ -17,9 +17,8 @@ namespace TE
         Material(Shader* shader, glm::vec4 baseColor);
         Material(Shader* shader, MaterialData data);
 
-        void Create();
-        void Bind();
-        
+        void Update(glm::mat4 mvp);
+
         Shader* GetShader() const { return shader; }
         MaterialData GetData() const { return data; }
         void SetData(const MaterialData& data) { this->data = data; }

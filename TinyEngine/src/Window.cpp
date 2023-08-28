@@ -78,7 +78,6 @@ namespace  TE
         });
     }
 
-
     void Window::OnUpdate()
     {
         glfwSwapBuffers(GlfwWindow);
