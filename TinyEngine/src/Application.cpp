@@ -95,6 +95,7 @@ namespace TE
         Shader flat( {
             ShaderElement(GL_VERTEX_SHADER, Path + "shaders/Flat.vert"),
             ShaderElement(GL_FRAGMENT_SHADER, Path + "shaders/Flat.frag")});
+        flat.Create();
         
 #pragma region flatCubes
         Material flatRed(&flat, glm::vec4(1.0, 0.0, 0.0, 1.0));
