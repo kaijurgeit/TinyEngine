@@ -1,8 +1,9 @@
 #include "Application.h"
 
-#include <filesystem>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <filesystem>
+#include <glm/fwd.hpp>
 
 #include "Camera.h"
 #include "Renderer.h"
@@ -59,10 +60,8 @@ namespace TE
         const std::string Path = p.parent_path().parent_path().string() + "/";
 #pragma region camera
         // viewer matrix transformations
-        glm::mat4 projection = glm::perspective(
-            glm::radians(45.f),
-            static_cast<float>(window->GetWidth()) / static_cast<float>(window->GetHeight()),
-        0.1f, 100.0f);
+        // glm::mat4 projection = Projection();
+        glm::mat4 projection = glm::mat4(1.0);
 #pragma endregion camera
 
 #pragma region vertexData
@@ -298,6 +297,14 @@ namespace TE
     {
         std::cout << "Test Event Callback via Bind - " << event.ToString() << std::endl;  
     }
+
+    // glm::mat4 Application::Projection()
+    // {
+    //     return glm::perspective(
+    //         glm::radians(GetCamera().GetZoom()),
+    //         static_cast<float>(GetWindow().GetWidth()) / static_cast<float>(GetWindow().GetHeight()),
+    //     0.1f, 100.0f);
+    // }
 
     void processInput(GLFWwindow *window)
     {

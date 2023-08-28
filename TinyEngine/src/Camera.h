@@ -48,6 +48,7 @@ namespace TE
         glm::vec3 GetFront() const { return Front; }
         glm::vec3 GetUp() const { return Up; }
         glm::vec3 GetRight() const { return Right; }
+        float GetZoom() const { return Zoom; }
 
     private:
         // calculates the front vector from the Camera's (updated) Euler Angles
@@ -66,6 +67,6 @@ namespace TE
         // camera options
         float MovementSpeed;
         float MouseSensitivity;
-        float Zoom;
+        float Zoom = 45.f;
     };
 }

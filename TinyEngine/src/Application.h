@@ -1,5 +1,8 @@
 #pragma once
 
+
+#include <glm/fwd.hpp>
+
 #include "Core.h"
 
 class Event;
@@ -8,7 +11,7 @@ namespace TE
 {
     class Window;
     class Renderer;
-    class Camera;    
+    class Camera;
     
     // Abstract Class
     class TE_API Application
@@ -23,6 +26,7 @@ namespace TE
         static Window& GetWindow() { return *Get().window.get(); }
         static Renderer& GetRenderer() { return *Get().renderer.get(); }
         static Camera& GetCamera() { return *Get().camera.get(); }
+        // static glm::mat4 Projection();
         
     private:
         std::unique_ptr<Window> window;
