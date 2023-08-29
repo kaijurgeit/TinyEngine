@@ -17,6 +17,7 @@
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
 #include "Material_Flat.h"
+#include "Material_Phong.h"
 #include "Material_Texture.h"
 #include "Mesh.h"
 
@@ -59,13 +60,10 @@ namespace TE
     
     void Application::Run()
     {
-        // get path
-        
-        
         glm::mat4 projection = Projection();
 
 #pragma region vertexData
-        const std::vector<float> vertices = FileSystem::FileToFloatVector((path + "resources/raw/cube_tex_normals.txt").c_str());
+        const std::vector<float> vertices = FileSystem::FileToFloatVector(path + "resources/raw/cube_tex_normals.txt");
         VertexArray va;
         VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
     
@@ -77,43 +75,41 @@ namespace TE
         
         glm::mat4 model = glm::mat4(1.0f);
 
-        Shader flat( {
+        Shader shaFlat( {
             ShaderElement(GL_VERTEX_SHADER, path + "shaders/Flat.vert"),
             ShaderElement(GL_FRAGMENT_SHADER, path + "shaders/Flat.frag")});
-        flat.Create();
         
 #pragma region flatCubes
-        Material_Flat flatRed(flat, glm::vec4(1.0, 0.0, 0.0, 1.0));
+        Material_Flat flatRed(shaFlat, glm::vec4(1.0, 0.0, 0.0, 1.0));
         Mesh redCube = Mesh::CreateCube(&va, &flatRed, glm::vec3(1.0f, 0.5f, 0.5f), 0.2);
         
-        Material_Flat flatGreen(flat, glm::vec4(0.0, 1.0, 0.0, 1.0));
+        Material_Flat flatGreen(shaFlat, glm::vec4(0.0, 1.0, 0.0, 1.0));
         Mesh greenCube = Mesh::CreateCube(&va, &flatGreen, glm::vec3(1.0f, 0.5f, 1.0f), 0.2);
         
-        Material_Flat flatBlue(flat, glm::vec4(0.0, 0.0, 1.0, 1.0));
+        Material_Flat flatBlue(shaFlat, glm::vec4(0.0, 0.0, 1.0, 1.0));
         Mesh blueCube = Mesh::CreateCube(&va, &flatBlue, glm::vec3(1.0f, 0.5f, 1.5f), 0.2);
         
-        Material_Flat flatYellow(flat, glm::vec4(1.0, 1.0, 0.0, 1.0));
+        Material_Flat flatYellow(shaFlat, glm::vec4(1.0, 1.0, 0.0, 1.0));
         Mesh yellowCube = Mesh::CreateCube(&va, &flatYellow, glm::vec3(1.0f, 0.5f, 2.0f), 0.2);
         
-        Material_Flat flatCyan(flat, glm::vec4(0.0, 1.0, 1.0, 1.0));
+        Material_Flat flatCyan(shaFlat, glm::vec4(0.0, 1.0, 1.0, 1.0));
         Mesh cyanCube = Mesh::CreateCube(&va, &flatCyan, glm::vec3(1.0f, 0.5f, 2.5f), 0.2);
         
-        Material_Flat flatMagenta(flat, glm::vec4(1.0, 0.0, 1.0, 1.0));
+        Material_Flat flatMagenta(shaFlat, glm::vec4(1.0, 0.0, 1.0, 1.0));
         Mesh magentaCube = Mesh::CreateCube(&va, &flatMagenta, glm::vec3(1.0f, 0.5f, 3.0f), 0.2);
         
-        Material_Flat flatWhite(flat, glm::vec4(1.0, 1.0, 1.0, 1.0));
+        Material_Flat flatWhite(shaFlat, glm::vec4(1.0, 1.0, 1.0, 1.0));
         Mesh whiteCube = Mesh::CreateCube(&va, &flatWhite, glm::vec3(1.0f, 0.5f, 3.5f), 0.2);        
 #pragma endregion flatCubes
 
 #pragma region texCube
-        Shader tex( {
+        Shader shaTexture( {
             ShaderElement(GL_VERTEX_SHADER, path + "shaders/Texture.vert"),
             ShaderElement(GL_FRAGMENT_SHADER, path + "shaders/Texture.frag")});
-        tex.Create();
 
-        Texture tContainer(path + "resources/textures/container.jpg");
-        Material_Texture texContainer(tex, &tContainer);
-        Mesh containerCube = Mesh::CreateCube(&va, &texContainer, glm::vec3(.0f, 0.5f, 4.0f), 0.5);
+        Texture texContainer(path + "resources/textures/container.jpg");
+        Material_Texture matContainer(shaTexture, &texContainer);
+        Mesh containerCube = Mesh::CreateCube(&va, &matContainer, glm::vec3(.0f, 0.5f, 4.0f), 0.5);
 #pragma endregion texCube
 
 #pragma region PointLights
@@ -127,81 +123,86 @@ namespace TE
 #pragma endregion PointLights
         
 #pragma region phongCube
+        Shader phong( {
+            ShaderElement(GL_VERTEX_SHADER, path + "shaders/Phong.vert"),
+            ShaderElement(GL_FRAGMENT_SHADER, path + "shaders/Phong.frag")});
+            
+        Texture texDiff(path + "resources/textures/container2.png"); 
+        Texture texSpec(path + "resources/textures/container2_specular.png");
+        MaterialData materialData = { &texDiff, &texSpec, 32.f };
+        Material_Phong matPhong(phong, materialData);
+
+        
         constexpr glm::vec3 phongCubePos(0.0f, 0.0f, 0.0f);
         model = glm::mat4(1.0f);
         model = glm::translate(model, phongCubePos);
         model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
 
-        Shader phongCube( {
-            ShaderElement(GL_VERTEX_SHADER, (path + "shaders/Phong.vert").c_str()),
-            ShaderElement(GL_FRAGMENT_SHADER, (path + "shaders/Phong.frag").c_str())});
-        phongCube.Create();
-        phongCube.Bind();
-        phongCube.SetUniform("projection", projection);
-        phongCube.SetUniform("model", model);
+        phong.Create();
+        phong.Bind();
+        phong.SetUniform("projection", projection);
+        phong.SetUniform("model", model);
 
-        phongCube.SetUniform("material.diffuse", 1);
-        phongCube.SetUniform("material.specular", 2);
+        phong.SetUniform("material.diffuse", 1);
+        phong.SetUniform("material.specular", 2);
                 // be sure to activate shader when setting uniforms/drawing objects
         
-        phongCube.SetUniform("material.shininess", 32.0f);
+        phong.SetUniform("material.shininess", 32.0f);
 
-        phongCube.SetUniform("dirLight.direction", -0.2f, -1.0f, -0.3f);
-        phongCube.SetUniform("dirLight.ambient", 0.05f, 0.05f, 0.05f);
-        phongCube.SetUniform("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
-        phongCube.SetUniform("dirLight.specular", 0.5f, 0.5f, 0.5f);
+        phong.SetUniform("dirLight.direction", -0.2f, -1.0f, -0.3f);
+        phong.SetUniform("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+        phong.SetUniform("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+        phong.SetUniform("dirLight.specular", 0.5f, 0.5f, 0.5f);
         // point light 1
-        phongCube.SetUniform("pointLights[0].position", pointLightPositions[0]);
-        phongCube.SetUniform("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-        phongCube.SetUniform("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-        phongCube.SetUniform("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-        phongCube.SetUniform("pointLights[0].constant", 1.0f);
-        phongCube.SetUniform("pointLights[0].linear", 0.09f);
-        phongCube.SetUniform("pointLights[0].quadratic", 0.032f);
+        phong.SetUniform("pointLights[0].position", pointLightPositions[0]);
+        phong.SetUniform("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+        phong.SetUniform("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+        phong.SetUniform("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+        phong.SetUniform("pointLights[0].constant", 1.0f);
+        phong.SetUniform("pointLights[0].linear", 0.09f);
+        phong.SetUniform("pointLights[0].quadratic", 0.032f);
         // point light 2
-        phongCube.SetUniform("pointLights[1].position", pointLightPositions[1]);
-        phongCube.SetUniform("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-        phongCube.SetUniform("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-        phongCube.SetUniform("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-        phongCube.SetUniform("pointLights[1].constant", 1.0f);
-        phongCube.SetUniform("pointLights[1].linear", 0.09f);
-        phongCube.SetUniform("pointLights[1].quadratic", 0.032f);
+        phong.SetUniform("pointLights[1].position", pointLightPositions[1]);
+        phong.SetUniform("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+        phong.SetUniform("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+        phong.SetUniform("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+        phong.SetUniform("pointLights[1].constant", 1.0f);
+        phong.SetUniform("pointLights[1].linear", 0.09f);
+        phong.SetUniform("pointLights[1].quadratic", 0.032f);
         // point light 3
-        phongCube.SetUniform("pointLights[2].position", pointLightPositions[2]);
-        phongCube.SetUniform("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-        phongCube.SetUniform("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-        phongCube.SetUniform("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
-        phongCube.SetUniform("pointLights[2].constant", 1.0f);
-        phongCube.SetUniform("pointLights[2].linear", 0.09f);
-        phongCube.SetUniform("pointLights[2].quadratic", 0.032f);
+        phong.SetUniform("pointLights[2].position", pointLightPositions[2]);
+        phong.SetUniform("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+        phong.SetUniform("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+        phong.SetUniform("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+        phong.SetUniform("pointLights[2].constant", 1.0f);
+        phong.SetUniform("pointLights[2].linear", 0.09f);
+        phong.SetUniform("pointLights[2].quadratic", 0.032f);
         // point light 4
-        phongCube.SetUniform("pointLights[3].position", pointLightPositions[3]);
-        phongCube.SetUniform("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-        phongCube.SetUniform("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-        phongCube.SetUniform("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-        phongCube.SetUniform("pointLights[3].constant", 1.0f);
-        phongCube.SetUniform("pointLights[3].linear", 0.09f);
-        phongCube.SetUniform("pointLights[3].quadratic", 0.032f);
+        phong.SetUniform("pointLights[3].position", pointLightPositions[3]);
+        phong.SetUniform("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+        phong.SetUniform("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+        phong.SetUniform("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+        phong.SetUniform("pointLights[3].constant", 1.0f);
+        phong.SetUniform("pointLights[3].linear", 0.09f);
+        phong.SetUniform("pointLights[3].quadratic", 0.032f);
         
         // spotLight
-        phongCube.SetUniform("spotLight.ambient", 0.0f, 0.0f, 0.0f);
-        phongCube.SetUniform("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
-        phongCube.SetUniform("spotLight.specular", 1.0f, 1.0f, 1.0f);
-        phongCube.SetUniform("spotLight.constant", 1.0f);
-        phongCube.SetUniform("spotLight.linear", 0.09f);
-        phongCube.SetUniform("spotLight.quadratic", 0.032f);
-        phongCube.SetUniform("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
-        phongCube.SetUniform("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+        phong.SetUniform("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+        phong.SetUniform("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+        phong.SetUniform("spotLight.specular", 1.0f, 1.0f, 1.0f);
+        phong.SetUniform("spotLight.constant", 1.0f);
+        phong.SetUniform("spotLight.linear", 0.09f);
+        phong.SetUniform("spotLight.quadratic", 0.032f);
+        phong.SetUniform("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+        phong.SetUniform("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
         
-        Texture diffuseMap((path + "resources/textures/container2.png").c_str()); 
-        Texture specularMap((path + "resources/textures/container2_specular.png").c_str()); 
 #pragma endregion phongCube
 
 #pragma region Model
         
         Shader ourShader( {
-            ShaderElement(GL_VERTEX_SHADER, (path + "shaders/Model.vert").c_str()),
-            ShaderElement(GL_FRAGMENT_SHADER, (path + "shaders/Model.frag").c_str())});
+            ShaderElement(GL_VERTEX_SHADER, path + "shaders/Model.vert"),
+            ShaderElement(GL_FRAGMENT_SHADER, path + "shaders/Model.frag")});
         ourShader.Create();
         
         Model ourModel((path + "resources/objects/cyborg/cyborg.obj").c_str());
@@ -235,9 +236,8 @@ namespace TE
             whiteCube.Draw();
 
             containerCube.Draw();
-            
-            diffuseMap.Bind(1);
-            specularMap.Bind(2);
+
+            matPhong.Update();
 
             
             // for (unsigned int i = 0; i < 4; i++)
@@ -248,17 +248,13 @@ namespace TE
             //     flat.SetUniform("model", model);
             //     renderer->Draw(va, light);
             // }
-            
-            tex.Bind();
-            tex.SetUniform("view", view);
-            renderer->Draw(va, tex);
 
-            phongCube.Bind();
-            phongCube.SetUniform("view", view);            
-            phongCube.SetUniform("viewPos", camera->GetPosition());
-            phongCube.SetUniform("spotLight.position", camera->GetPosition());
-            phongCube.SetUniform("spotLight.direction", camera->GetFront());
-            renderer->Draw(va, phongCube);
+            phong.Bind();
+            phong.SetUniform("view", view);            
+            phong.SetUniform("viewPos", camera->GetPosition());
+            phong.SetUniform("spotLight.position", camera->GetPosition());
+            phong.SetUniform("spotLight.direction", camera->GetFront());
+            renderer->Draw(va, phong);
 
             ourModel.Draw(ourShader);
             

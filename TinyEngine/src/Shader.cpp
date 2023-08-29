@@ -10,6 +10,7 @@ namespace TE
     Shader::Shader(std::vector<ShaderElement> shaders)
     : Shaders(std::move(shaders))
     {
+        Create();
     }
 
     Shader::~Shader()

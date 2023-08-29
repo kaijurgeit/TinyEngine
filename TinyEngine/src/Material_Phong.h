@@ -4,16 +4,19 @@
 
 namespace TE
 {    
+    struct MaterialData
+    {
+        Texture* diffuse;
+        Texture* specular;
+        float shininess;
+    };
     class Material_Phong : public Material
     {
-        struct MaterialData
-        {
-            Texture texture;
-        };
         
     public:
-        Material_Phong(Shader& shader);
+        Material_Phong(Shader& shader, MaterialData materialData);
         void Update(glm::mat4 mvp) override;
-        // MaterialData data;
+        void Update();
+        MaterialData material;
     };
 }

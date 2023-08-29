@@ -11,6 +11,7 @@ namespace TE
     public:
         static std::string ReadFile(const char* path);
         static std::string ReadFile(std::string path);
+        static std::vector<float> FileToFloatVector(const std::string& str);
         static std::vector<float> FileToFloatVector(const char* path);
         static std::vector<float> ParseToFloatVector(const std::string& str);
 
