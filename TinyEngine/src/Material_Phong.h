@@ -23,6 +23,7 @@ namespace TE
     {
         
     public:
+        void Init();
         Material_Phong(Shader& shader, MaterialData materialData);
         void Update(glm::mat4 model) override;
         MaterialData material;

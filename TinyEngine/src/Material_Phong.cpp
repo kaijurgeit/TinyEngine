@@ -6,8 +6,14 @@
 namespace TE
 {
 
+
     Material_Phong::Material_Phong(Shader& shader, MaterialData materialData)
         : Material(shader), material(materialData)
+    {
+        Init();
+    }
+    
+    void Material_Phong::Init()
     {
         shader.Bind();
         
@@ -22,9 +28,10 @@ namespace TE
     }
 
     void Material_Phong::Update(glm::mat4 model)
-    {
-        // Material::Update(mvp);
-        shader.Bind();
+    {   
+        shader.Bind();        
+        shader.SetUniform("projection", Application::GetProjection());
+        shader.SetUniform("model", model);
         material.diffuse->Bind(1);
         material.specular->Bind(2);
     }

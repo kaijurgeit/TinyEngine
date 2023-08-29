@@ -60,7 +60,7 @@ namespace TE
     
     void Application::Run()
     {
-        glm::mat4 projection = Projection();
+        glm::mat4 projection = GetProjection();
 
 #pragma region vertexData
         const std::vector<float> vertices = FileSystem::FileToFloatVector(path + "resources/raw/cube_tex_normals.txt");
@@ -139,8 +139,6 @@ namespace TE
         model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
 
         phong.Bind();
-        phong.SetUniform("projection", projection);
-        phong.SetUniform("model", model);
         
         // point light 1
         phong.SetUniform("pointLights[0].position", pointLightPositions[0]);
@@ -263,7 +261,7 @@ namespace TE
         std::cout << "Test Event Callback via Bind - " << event.ToString() << std::endl;  
     }
 
-    glm::mat4 Application::Projection()
+    glm::mat4 Application::GetProjection()
     {
         return glm::perspective(
             glm::radians(GetCamera().GetZoom()),
