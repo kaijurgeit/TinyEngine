@@ -173,16 +173,6 @@ namespace TE
         phong.SetUniform("pointLights[3].linear", 0.09f);
         phong.SetUniform("pointLights[3].quadratic", 0.032f);
         
-        // spotLight
-        phong.SetUniform("spotLight.ambient", 0.0f, 0.0f, 0.0f);
-        phong.SetUniform("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
-        phong.SetUniform("spotLight.specular", 1.0f, 1.0f, 1.0f);
-        phong.SetUniform("spotLight.constant", 1.0f);
-        phong.SetUniform("spotLight.linear", 0.09f);
-        phong.SetUniform("spotLight.quadratic", 0.032f);
-        phong.SetUniform("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
-        phong.SetUniform("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
-        
 #pragma endregion phongCube
 
 #pragma region Model

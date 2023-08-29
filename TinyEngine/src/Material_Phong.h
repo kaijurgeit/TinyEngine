@@ -19,14 +19,47 @@ namespace TE
         glm::vec3 specular =   glm::vec3(0.5f, 0.5f, 0.5f);
     };
     
+    struct PointLight {
+        glm::vec3 position;
+
+        float constant;
+        float linear;
+        float quadratic;
+
+        glm::vec3 ambient;
+        glm::vec3 diffuse;
+        glm::vec3 specular;
+    };
+
+    struct SpotLight {
+        glm::vec3 position;
+        glm::vec3 direction;
+        
+        float cutOff = glm::cos(glm::radians(12.5));
+        float outerCutOff = glm::cos(glm::radians(15.0));
+        float constant = 1.0;
+        float linear = 0.09;
+        float quadratic = 0.032f;
+
+        glm::vec3 ambient = glm::vec3(0.0, 0.0, 0.0);
+        glm::vec3 diffuse = glm::vec3(1.0, 1.0, 1.0);
+        glm::vec3 specular = glm::vec3(1.0, 1.0, 1.0);
+    };
+    
+    
     class Material_Phong : public Material
     {
         
     public:
-        void Init();
         Material_Phong(Shader& shader, MaterialData materialData);
+        void Init();
+        void SetDirectionalLightUniform();
+        void SetMaterialUniform();
+        void SetSpotlightUniform();
         void Update(glm::mat4 model) override;
         MaterialData material;
         DirectionalLight dirLight;
+        PointLight pointLight;
+        SpotLight spotLight;
     };
 }
