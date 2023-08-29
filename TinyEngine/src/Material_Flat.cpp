@@ -1,26 +1,20 @@
 ﻿#include "Material_Flat.h"
 
+#include "Application.h"
 #include "Shader.h"
+#include "glad/glad.h"
 
 namespace TE
-{    
-    Material_Flat::Material_Flat(Shader* shader, glm::vec4 baseColor)
-        : shader(shader)
+{
+    Material_Flat::Material_Flat(Shader& shader, glm::vec4 baseColor)
+        : Material(shader)
     {
-        shader->Bind();
         data.color = baseColor;
-    }
-
-    Material_Flat::Material_Flat(Shader* shader, MaterialData data)
-        : shader(shader), data(data)
-    {
-        
     }
 
     void Material_Flat::Update(glm::mat4 mvp)
     {
-        shader->Bind();
-        shader->SetUniform("mvp", mvp);
-        shader->SetUniform("color", data.color);
+        Material::Update(mvp);
+        shader.SetUniform("color", data.color);
     }
 }

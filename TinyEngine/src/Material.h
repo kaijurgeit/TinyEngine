@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <memory>
 #include <glm/glm.hpp>
 
 namespace TE
@@ -8,19 +7,18 @@ namespace TE
     {
         glm::vec4 color;
     };
-    
+
+    struct MaterialData;
     class Shader;
 
     class Material
     {
     public:
-        Material(Shader* shader, glm::vec4 baseColor);
-        Material(Shader* shader, MaterialData data);
-        void Update(glm::mat4 mvp);
-
+        Material(Shader& shader);
+        virtual void Update(glm::mat4 mvp);
         
-    private:
-        Shader* shader;
+    protected:
+        Shader& shader;
         MaterialData data;
     };    
 }

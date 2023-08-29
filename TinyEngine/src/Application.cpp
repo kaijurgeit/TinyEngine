@@ -16,7 +16,8 @@
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
-#include "Material.h"
+#include "Material_Flat.h"
+#include "Mesh.h"
 
 namespace TE
 {
@@ -79,25 +80,25 @@ namespace TE
         flat.Create();
         
 #pragma region flatCubes
-        Material flatRed(&flat, glm::vec4(1.0, 0.0, 0.0, 1.0));
+        Material_Flat flatRed(flat, glm::vec4(1.0, 0.0, 0.0, 1.0));
         Mesh redCube = Mesh::CreateCube(&va, &flatRed, glm::vec3(1.0f, 0.5f, 0.5f), 0.2);
         
-        Material flatGreen(&flat, glm::vec4(0.0, 1.0, 0.0, 1.0));
+        Material_Flat flatGreen(flat, glm::vec4(0.0, 1.0, 0.0, 1.0));
         Mesh greenCube = Mesh::CreateCube(&va, &flatGreen, glm::vec3(1.0f, 0.5f, 1.0f), 0.2);
         
-        Material flatBlue(&flat, glm::vec4(0.0, 0.0, 1.0, 1.0));
+        Material_Flat flatBlue(flat, glm::vec4(0.0, 0.0, 1.0, 1.0));
         Mesh blueCube = Mesh::CreateCube(&va, &flatBlue, glm::vec3(1.0f, 0.5f, 1.5f), 0.2);
         
-        Material flatYellow(&flat, glm::vec4(1.0, 1.0, 0.0, 1.0));
+        Material_Flat flatYellow(flat, glm::vec4(1.0, 1.0, 0.0, 1.0));
         Mesh yellowCube = Mesh::CreateCube(&va, &flatYellow, glm::vec3(1.0f, 0.5f, 2.0f), 0.2);
         
-        Material flatCyan(&flat, glm::vec4(0.0, 1.0, 1.0, 1.0));
+        Material_Flat flatCyan(flat, glm::vec4(0.0, 1.0, 1.0, 1.0));
         Mesh cyanCube = Mesh::CreateCube(&va, &flatCyan, glm::vec3(1.0f, 0.5f, 2.5f), 0.2);
         
-        Material flatMagenta(&flat, glm::vec4(1.0, 0.0, 1.0, 1.0));
+        Material_Flat flatMagenta(flat, glm::vec4(1.0, 0.0, 1.0, 1.0));
         Mesh magentaCube = Mesh::CreateCube(&va, &flatMagenta, glm::vec3(1.0f, 0.5f, 3.0f), 0.2);
         
-        Material flatWhite(&flat, glm::vec4(1.0, 1.0, 1.0, 1.0));
+        Material_Flat flatWhite(flat, glm::vec4(1.0, 1.0, 1.0, 1.0));
         Mesh whiteCube = Mesh::CreateCube(&va, &flatWhite, glm::vec3(1.0f, 0.5f, 3.5f), 0.2);        
 #pragma endregion flatCubes
 

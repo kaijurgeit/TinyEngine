@@ -4,24 +4,15 @@
 
 namespace TE
 {    
-    Material::Material(Shader* shader, glm::vec4 baseColor)
+    Material::Material(Shader& shader)
         : shader(shader)
     {
-        shader->Bind();
-        data.color = baseColor;
-    }
-
-    Material::Material(Shader* shader, MaterialData data)
-        : shader(shader), data(data)
-    {
-        
+        shader.Bind();
     }
 
     void Material::Update(glm::mat4 mvp)
     {
-        shader->Bind();
-        shader->SETUNIFORM(mvp);
-        shader->SETUNIFORM(data.color);
-        shader->SetUniform("color", data.color);
+        shader.Bind();
+        shader.SetUniform("mvp", mvp);
     }
 }

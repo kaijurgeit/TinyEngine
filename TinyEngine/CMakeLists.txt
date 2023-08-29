@@ -19,6 +19,8 @@ set(SRC_FILES
     Main.h
     Material.cpp
     Material.h
+    Material_Flat.cpp
+    Material_Flat.h
     Mesh.cpp
     Mesh.h
     Model.cpp
