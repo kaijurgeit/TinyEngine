@@ -3,12 +3,6 @@
 
 namespace TE
 {
-    struct MaterialData
-    {
-        glm::vec4 color;
-    };
-
-    struct MaterialData;
     class Shader;
 
     class Material
@@ -19,7 +13,6 @@ namespace TE
         
     protected:
         Shader& shader;
-        MaterialData data;
     };    
 }
 

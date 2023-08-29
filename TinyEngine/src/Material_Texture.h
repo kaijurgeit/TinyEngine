@@ -1,21 +1,23 @@
 ﻿#pragma once
+#include <string>
 
 #include "Material.h"
+#include "Texture.h"
 
 namespace TE
 {
-    
-    class Material_Flat : public Material
+    class Material_Texture : public Material
     {
         struct MaterialData
         {
-            glm::vec4 color;
+            Texture texture;
         };
-
+        
     public:
-        Material_Flat(Shader& shader, glm::vec4 baseColor);
+        Material_Texture(Shader& shader, std::string texPath);
         void Update(glm::mat4 mvp) override;
+        
+    private:
         MaterialData data;
     };    
 }
-

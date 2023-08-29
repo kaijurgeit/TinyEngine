@@ -17,6 +17,7 @@
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
 #include "Material_Flat.h"
+#include "Material_Texture.h"
 #include "Mesh.h"
 
 namespace TE
@@ -45,6 +46,9 @@ namespace TE
         renderer = std::make_unique<Renderer>();
         camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
         
+        std::filesystem::path p(__FILE__);
+        path = p.parent_path().parent_path().string() + "/";
+        
         glfwSetCursorPosCallback(window->GlfwWindow, mouse_callback);
         glfwSetInputMode(window->GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
@@ -56,13 +60,12 @@ namespace TE
     void Application::Run()
     {
         // get path
-        std::filesystem::path p(__FILE__);
-        const std::string Path = p.parent_path().parent_path().string() + "/";
+        
         
         glm::mat4 projection = Projection();
 
 #pragma region vertexData
-        const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex_normals.txt").c_str());
+        const std::vector<float> vertices = FileSystem::FileToFloatVector((path + "resources/raw/cube_tex_normals.txt").c_str());
         VertexArray va;
         VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
     
@@ -75,8 +78,8 @@ namespace TE
         glm::mat4 model = glm::mat4(1.0f);
 
         Shader flat( {
-            ShaderElement(GL_VERTEX_SHADER, Path + "shaders/Flat.vert"),
-            ShaderElement(GL_FRAGMENT_SHADER, Path + "shaders/Flat.frag")});
+            ShaderElement(GL_VERTEX_SHADER, path + "shaders/Flat.vert"),
+            ShaderElement(GL_FRAGMENT_SHADER, path + "shaders/Flat.frag")});
         flat.Create();
         
 #pragma region flatCubes
@@ -103,21 +106,13 @@ namespace TE
 #pragma endregion flatCubes
 
 #pragma region texCube
-        constexpr glm::vec3 texCubePos(0.5f, 1.0f, 0.5f);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, texCubePos);
-        model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
+        Shader tex( {
+            ShaderElement(GL_VERTEX_SHADER, path + "shaders/Texture.vert"),
+            ShaderElement(GL_FRAGMENT_SHADER, path + "shaders/Texture.frag")});
+        tex.Create();
 
-        Shader texCube( {
-            ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Texture.vert").c_str()),
-            ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Texture.frag").c_str())});
-        texCube.Create();
-        texCube.Bind();
-        texCube.SetUniform("projection", projection);
-        texCube.SetUniform("model", model);
-        texCube.SetUniform("texture0", 0);
-
-        Texture albedo((Path + "resources/textures/container.jpg").c_str()); 
+        Material_Texture texContainer(tex, path + "resources/textures/container.jpg");
+        Mesh containerCube = Mesh::CreateCube(&va, &texContainer, glm::vec3(.0f, 0.5f, 4.0f), 0.5);
 #pragma endregion texCube
 
 #pragma region PointLights
@@ -137,8 +132,8 @@ namespace TE
         model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
 
         Shader phongCube( {
-            ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Phong.vert").c_str()),
-            ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Phong.frag").c_str())});
+            ShaderElement(GL_VERTEX_SHADER, (path + "shaders/Phong.vert").c_str()),
+            ShaderElement(GL_FRAGMENT_SHADER, (path + "shaders/Phong.frag").c_str())});
         phongCube.Create();
         phongCube.Bind();
         phongCube.SetUniform("projection", projection);
@@ -197,18 +192,18 @@ namespace TE
         phongCube.SetUniform("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
         phongCube.SetUniform("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
         
-        Texture diffuseMap((Path + "resources/textures/container2.png").c_str()); 
-        Texture specularMap((Path + "resources/textures/container2_specular.png").c_str()); 
+        Texture diffuseMap((path + "resources/textures/container2.png").c_str()); 
+        Texture specularMap((path + "resources/textures/container2_specular.png").c_str()); 
 #pragma endregion phongCube
 
 #pragma region Model
         
         Shader ourShader( {
-            ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Model.vert").c_str()),
-            ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Model.frag").c_str())});
+            ShaderElement(GL_VERTEX_SHADER, (path + "shaders/Model.vert").c_str()),
+            ShaderElement(GL_FRAGMENT_SHADER, (path + "shaders/Model.frag").c_str())});
         ourShader.Create();
         
-        Model ourModel((Path + "resources/objects/cyborg/cyborg.obj").c_str());
+        Model ourModel((path + "resources/objects/cyborg/cyborg.obj").c_str());
         
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
@@ -216,7 +211,6 @@ namespace TE
         ourShader.Bind();
         ourShader.SetUniform("model", model);
 #pragma endregion Model
-        
         while (true)
         {
             // per-frame time logic
@@ -238,8 +232,9 @@ namespace TE
             cyanCube.Draw();
             magentaCube.Draw();
             whiteCube.Draw();
+
+            containerCube.Draw();
             
-            albedo.Bind(0);
             diffuseMap.Bind(1);
             specularMap.Bind(2);
 
@@ -253,9 +248,9 @@ namespace TE
             //     renderer->Draw(va, light);
             // }
             
-            texCube.Bind();
-            texCube.SetUniform("view", view);
-            renderer->Draw(va, texCube);
+            tex.Bind();
+            tex.SetUniform("view", view);
+            renderer->Draw(va, tex);
 
             phongCube.Bind();
             phongCube.SetUniform("view", view);            
