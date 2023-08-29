@@ -120,6 +120,7 @@ namespace TE
         glm::vec3(-4.0f,  2.0f, -12.0f),
         glm::vec3( 0.0f,  0.0f, -3.0f)
     };
+        std::array<glm::vec3, 4> &pos = reinterpret_cast<std::array<glm::vec3, 4>&>(pointLightPositions);
 #pragma endregion PointLights
         
 #pragma region phongCube
@@ -130,7 +131,7 @@ namespace TE
         Texture texDiff(path + "resources/textures/container2.png"); 
         Texture texSpec(path + "resources/textures/container2_specular.png");
         MaterialData materialData = { &texDiff, &texSpec, 32.f };        
-        Material_Phong matPhong(phong, materialData);
+        Material_Phong matPhong(phong, materialData, pos);
         Mesh phongCube = Mesh::CreateCube(&va, &matPhong, glm::vec3(3.0f, 0.5f, 4.0f), 0.5);
         
         constexpr glm::vec3 phongCubePos(0.0f, 0.0f, 0.0f);
@@ -139,39 +140,6 @@ namespace TE
         model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
 
         phong.Bind();
-        
-        // point light 1
-        phong.SetUniform("pointLights[0].position", pointLightPositions[0]);
-        phong.SetUniform("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-        phong.SetUniform("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-        phong.SetUniform("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-        phong.SetUniform("pointLights[0].constant", 1.0f);
-        phong.SetUniform("pointLights[0].linear", 0.09f);
-        phong.SetUniform("pointLights[0].quadratic", 0.032f);
-        // point light 2
-        phong.SetUniform("pointLights[1].position", pointLightPositions[1]);
-        phong.SetUniform("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-        phong.SetUniform("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-        phong.SetUniform("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-        phong.SetUniform("pointLights[1].constant", 1.0f);
-        phong.SetUniform("pointLights[1].linear", 0.09f);
-        phong.SetUniform("pointLights[1].quadratic", 0.032f);
-        // point light 3
-        phong.SetUniform("pointLights[2].position", pointLightPositions[2]);
-        phong.SetUniform("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-        phong.SetUniform("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-        phong.SetUniform("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
-        phong.SetUniform("pointLights[2].constant", 1.0f);
-        phong.SetUniform("pointLights[2].linear", 0.09f);
-        phong.SetUniform("pointLights[2].quadratic", 0.032f);
-        // point light 4
-        phong.SetUniform("pointLights[3].position", pointLightPositions[3]);
-        phong.SetUniform("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-        phong.SetUniform("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-        phong.SetUniform("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-        phong.SetUniform("pointLights[3].constant", 1.0f);
-        phong.SetUniform("pointLights[3].linear", 0.09f);
-        phong.SetUniform("pointLights[3].quadratic", 0.032f);
         
 #pragma endregion phongCube
 

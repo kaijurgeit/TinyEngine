@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <array>
+
 #include "Material.h"
 #include "Texture.h"
 
@@ -51,7 +53,9 @@ namespace TE
     {
         
     public:
-        Material_Phong(Shader& shader, MaterialData materialData);
+        Material_Phong(Shader& shader, MaterialData materialData, std::array<glm::vec3, 4> pointLightPositions);
+        void SetPointLights(std::array<glm::vec3, 4> pointLightPositions);
+        void SetPointLightUniforms();
         void Init();
         void SetDirectionalLightUniform();
         void SetMaterialUniform();
@@ -61,5 +65,6 @@ namespace TE
         DirectionalLight dirLight;
         PointLight pointLight;
         SpotLight spotLight;
+        std::array<PointLight, 4> pointLights;
     };
 }
