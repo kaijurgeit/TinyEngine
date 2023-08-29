@@ -6,7 +6,7 @@ namespace TE
 {
     struct MaterialData
     {
-        glm::vec4 BaseColor;
+        glm::vec4 color;
     };
     
     class Shader;
@@ -16,12 +16,8 @@ namespace TE
     public:
         Material(Shader* shader, glm::vec4 baseColor);
         Material(Shader* shader, MaterialData data);
-
         void Update(glm::mat4 mvp);
 
-        Shader* GetShader() const { return shader; }
-        MaterialData GetData() const { return data; }
-        void SetData(const MaterialData& data) { this->data = data; }
         
     private:
         Shader* shader;

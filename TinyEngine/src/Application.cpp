@@ -36,7 +36,6 @@ namespace TE
     bool firstMouse = true;
 #pragma endregion globals
 
-
     Application::Application()    
     {
         instance = this;
@@ -58,10 +57,8 @@ namespace TE
         // get path
         std::filesystem::path p(__FILE__);
         const std::string Path = p.parent_path().parent_path().string() + "/";
-#pragma region camera
-        // viewer matrix transformations
+        
         glm::mat4 projection = Projection();
-#pragma endregion camera
 
 #pragma region vertexData
         const std::vector<float> vertices = TE::FileSystem::FileToFloatVector((Path + "resources/raw/cube_tex_normals.txt").c_str());
@@ -74,23 +71,7 @@ namespace TE
         va.AddBuffer(vb, layout);
 #pragma endregion vertexData
         
-#pragma region light
-        constexpr glm::vec3 lightPos(1.0f, 0.5f, 1.0f);
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-        
-        // load cube vertex data
-        
-        // build and compile Shaders
-        Shader light( {
-            ShaderElement(GL_VERTEX_SHADER, (Path + "shaders/Light.vert").c_str()),
-            ShaderElement(GL_FRAGMENT_SHADER, (Path + "shaders/Light.frag").c_str())});
-        light.Create();
-        light.Bind();
-        light.SetUniform("projection", projection);
-        light.SetUniform("model", model);
-#pragma endregion light
 
         Shader flat( {
             ShaderElement(GL_VERTEX_SHADER, Path + "shaders/Flat.vert"),
@@ -249,13 +230,13 @@ namespace TE
             renderer->Clear();
             glm::mat4 view = camera->GetViewMatrix();
 
-            redCube.Draw(view);
-            greenCube.Draw(view);
-            blueCube.Draw(view);
-            yellowCube.Draw(view);
-            cyanCube.Draw(view);
-            magentaCube.Draw(view);
-            whiteCube.Draw(view);
+            redCube.Draw();
+            greenCube.Draw();
+            blueCube.Draw();
+            yellowCube.Draw();
+            cyanCube.Draw();
+            magentaCube.Draw();
+            whiteCube.Draw();
             
             albedo.Bind(0);
             diffuseMap.Bind(1);
@@ -267,7 +248,7 @@ namespace TE
             //     model = glm::mat4(1.0f);
             //     model = glm::translate(model, pointLightPositions[i]);
             //     model = glm::scale(model, glm::vec3(0.2f));                
-            //     light.SetUniform("model", model);
+            //     flat.SetUniform("model", model);
             //     renderer->Draw(va, light);
             // }
             

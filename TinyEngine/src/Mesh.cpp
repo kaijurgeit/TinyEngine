@@ -28,7 +28,7 @@ namespace TE
         return Mesh(vao, material, model);
     }
     
-    void Mesh::Draw(glm::mat4 view)
+    void Mesh::Draw()
     {
         vertexArray->Bind();
         glm::mat4 mvp = Application::Projection() * Application::GetCamera().GetViewMatrix() * model;

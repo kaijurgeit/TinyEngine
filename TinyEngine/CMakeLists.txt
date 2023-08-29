@@ -45,8 +45,6 @@ list(TRANSFORM SRC_FILES PREPEND "src/")
 set(SHADER_FILES
     Flat.frag
     Flat.vert
-    Light.frag
-    Light.vert
     Model.frag
     Model.vert
     Phong.frag
