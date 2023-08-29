@@ -196,16 +196,8 @@ namespace TE
             //     renderer->Draw(va, light);
             // }
 
-            phong.Bind();
-            phong.SetUniform("view", view);            
-            phong.SetUniform("viewPos", camera->GetPosition());
-            phong.SetUniform("spotLight.position", camera->GetPosition());
-            phong.SetUniform("spotLight.direction", camera->GetFront());
-            renderer->Draw(va, phong);
-
             ourModel.Draw(ourShader);
             
-            // glDisable(GL_FALSE);     // uncomment to check debug
             window->OnUpdate();               
         }
 

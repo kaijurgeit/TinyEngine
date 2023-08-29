@@ -1,6 +1,7 @@
 ﻿#include "Material_Phong.h"
 
 #include "Application.h"
+#include "Camera.h"
 #include "Shader.h"
 
 namespace TE
@@ -123,10 +124,16 @@ namespace TE
 
 
     void Material_Phong::Update(glm::mat4 model)
-    {   
+    {
+        spotLight.position = Application::GetCamera().GetPosition();
+        spotLight.direction = Application::GetCamera().GetFront();
         shader.Bind();        
         shader.SetUniform("projection", Application::GetProjection());
         shader.SetUniform("model", model);
+        shader.SetUniform("view", Application::GetCamera().GetViewMatrix());            
+        shader.SetUniform("viewPos", Application::GetCamera().GetPosition());
+        shader.SetUniform("spotLight.position", spotLight.position);
+        shader.SetUniform("spotLight.direction", spotLight.direction);
         material.diffuse->Bind(1);
         material.specular->Bind(2);
     }
