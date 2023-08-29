@@ -129,9 +129,8 @@ namespace TE
             
         Texture texDiff(path + "resources/textures/container2.png"); 
         Texture texSpec(path + "resources/textures/container2_specular.png");
-        MaterialData materialData = { &texDiff, &texSpec, 32.f };
+        MaterialData materialData = { &texDiff, &texSpec, 32.f };        
         Material_Phong matPhong(phong, materialData);
-
         
         constexpr glm::vec3 phongCubePos(0.0f, 0.0f, 0.0f);
         model = glm::mat4(1.0f);
@@ -149,10 +148,10 @@ namespace TE
         
         phong.SetUniform("material.shininess", 32.0f);
 
-        phong.SetUniform("dirLight.direction", -0.2f, -1.0f, -0.3f);
-        phong.SetUniform("dirLight.ambient", 0.05f, 0.05f, 0.05f);
-        phong.SetUniform("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
-        phong.SetUniform("dirLight.specular", 0.5f, 0.5f, 0.5f);
+        // phong.SetUniform("dirLight.direction", -0.2f, -1.0f, -0.3f);
+        // phong.SetUniform("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+        // phong.SetUniform("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+        // phong.SetUniform("dirLight.specular", 0.5f, 0.5f, 0.5f);
         // point light 1
         phong.SetUniform("pointLights[0].position", pointLightPositions[0]);
         phong.SetUniform("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
