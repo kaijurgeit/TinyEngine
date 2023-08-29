@@ -111,7 +111,8 @@ namespace TE
             ShaderElement(GL_FRAGMENT_SHADER, path + "shaders/Texture.frag")});
         tex.Create();
 
-        Material_Texture texContainer(tex, path + "resources/textures/container.jpg");
+        Texture tContainer(path + "resources/textures/container.jpg");
+        Material_Texture texContainer(tex, &tContainer);
         Mesh containerCube = Mesh::CreateCube(&va, &texContainer, glm::vec3(.0f, 0.5f, 4.0f), 0.5);
 #pragma endregion texCube
 

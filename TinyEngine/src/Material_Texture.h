@@ -10,11 +10,11 @@ namespace TE
     {
         struct MaterialData
         {
-            Texture texture;
+            Texture* texture;
         };
         
     public:
-        Material_Texture(Shader& shader, std::string texPath);
+        Material_Texture(Shader& shader, Texture* texture);
         void Update(glm::mat4 mvp) override;
         
     private:
