@@ -1,5 +1,7 @@
 ﻿#include "Material.h"
 
+#include "Application.h"
+#include "Camera.h"
 #include "Shader.h"
 
 namespace TE
@@ -10,9 +12,10 @@ namespace TE
         shader.Bind();
     }
 
-    void Material::Update(glm::mat4 mvp)
+    void Material::Update(glm::mat4 model)
     {
         shader.Bind();
+        glm::mat4 mvp = Application::Projection() * Application::GetCamera().GetViewMatrix() * model; 
         shader.SetUniform("mvp", mvp);
     }
 }

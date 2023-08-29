@@ -9,7 +9,7 @@ namespace TE
     {
     public:
         Material(Shader& shader);
-        virtual void Update(glm::mat4 mvp);
+        virtual void Update(glm::mat4 model);
         
     protected:
         Shader& shader;

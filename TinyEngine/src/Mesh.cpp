@@ -32,7 +32,7 @@ namespace TE
     {
         vertexArray->Bind();
         glm::mat4 mvp = Application::Projection() * Application::GetCamera().GetViewMatrix() * model;
-        material->Update(mvp);
+        material->Update(model);
         glDrawArrays(GL_TRIANGLES, 0, 36);        
     }
 

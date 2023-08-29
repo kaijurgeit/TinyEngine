@@ -24,8 +24,7 @@ namespace TE
         
     public:
         Material_Phong(Shader& shader, MaterialData materialData);
-        void Update(glm::mat4 mvp) override;
-        void Update();
+        void Update(glm::mat4 model) override;
         MaterialData material;
         DirectionalLight dirLight;
     };

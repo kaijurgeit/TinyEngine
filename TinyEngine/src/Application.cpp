@@ -131,27 +131,17 @@ namespace TE
         Texture texSpec(path + "resources/textures/container2_specular.png");
         MaterialData materialData = { &texDiff, &texSpec, 32.f };        
         Material_Phong matPhong(phong, materialData);
+        Mesh phongCube = Mesh::CreateCube(&va, &matPhong, glm::vec3(3.0f, 0.5f, 4.0f), 0.5);
         
         constexpr glm::vec3 phongCubePos(0.0f, 0.0f, 0.0f);
         model = glm::mat4(1.0f);
         model = glm::translate(model, phongCubePos);
         model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
 
-        phong.Create();
         phong.Bind();
         phong.SetUniform("projection", projection);
         phong.SetUniform("model", model);
-
-        phong.SetUniform("material.diffuse", 1);
-        phong.SetUniform("material.specular", 2);
-                // be sure to activate shader when setting uniforms/drawing objects
         
-        phong.SetUniform("material.shininess", 32.0f);
-
-        // phong.SetUniform("dirLight.direction", -0.2f, -1.0f, -0.3f);
-        // phong.SetUniform("dirLight.ambient", 0.05f, 0.05f, 0.05f);
-        // phong.SetUniform("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
-        // phong.SetUniform("dirLight.specular", 0.5f, 0.5f, 0.5f);
         // point light 1
         phong.SetUniform("pointLights[0].position", pointLightPositions[0]);
         phong.SetUniform("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
@@ -236,7 +226,9 @@ namespace TE
 
             containerCube.Draw();
 
-            matPhong.Update();
+            matPhong.Update(model);
+
+            phongCube.Draw();
 
             
             // for (unsigned int i = 0; i < 4; i++)
