@@ -26,15 +26,6 @@ namespace TE
     Application* Application::instance = nullptr;
 #pragma region globals
     void processInput(GLFWwindow *window);
-    
-    // timing
-    float deltaTime = 0.0f;
-    float lastFrame = 0.0f;
-
-    // camera
-    float lastX = 400.f;
-    float lastY = 300.f;
-    bool firstMouse = true;
 #pragma endregion globals
 
     Application::Application()    
@@ -156,9 +147,9 @@ namespace TE
         {
             // per-frame time logic
             // --------------------
-            const float currentFrame = static_cast<float>(glfwGetTime());
-            deltaTime = currentFrame - lastFrame;
-            lastFrame = currentFrame;
+            const float currentFrameTime = static_cast<float>(glfwGetTime());
+            deltaTime = currentFrameTime - lastFrameTime;
+            lastFrameTime = currentFrameTime;
             
             // processInput(window->GlfwWindow);
             renderer->Clear();
@@ -211,13 +202,13 @@ namespace TE
             glfwSetWindowShouldClose(window, true);
 
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            Application::GetCamera().ProcessKeyboard(FORWARD, deltaTime);
+            Application::GetCamera().ProcessKeyboard(FORWARD, Application::GetDeltaTime());
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            Application::GetCamera().ProcessKeyboard(BACKWARD, deltaTime);
+            Application::GetCamera().ProcessKeyboard(BACKWARD, Application::GetDeltaTime());
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            Application::GetCamera().ProcessKeyboard(LEFT, deltaTime);
+            Application::GetCamera().ProcessKeyboard(LEFT, Application::GetDeltaTime());
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            Application::GetCamera().ProcessKeyboard(RIGHT, deltaTime);
+            Application::GetCamera().ProcessKeyboard(RIGHT, Application::GetDeltaTime());
     }
 }
 
