@@ -1,9 +1,12 @@
 #pragma once
 #include <glm/fwd.hpp>
 #include "Core.h"
+#include "Event.h"
 
 namespace TE
 {
+    class OtherEvent;
+    class InputEvent;
     class Window;
     class Renderer;
     class Camera;
@@ -26,6 +29,7 @@ namespace TE
         static glm::mat4 GetProjection();        
         static float GetDeltaTime() { return Get().deltaTime; }
         
+        
     private:
         std::unique_ptr<Window> window;
         std::unique_ptr<Renderer> renderer;
@@ -33,9 +37,13 @@ namespace TE
         std::string path;
         float lastFrameTime;
         float deltaTime;
-
-    private:
+        
         static Application* instance;
+        
+        void ProcessInput();
+        void UpdateDeltaTime();
+        void OnInput(InputEvent e); 
+        void OnOther(OtherEvent e);   
     };
     
     Application* CreateApplication();

@@ -37,8 +37,8 @@ namespace TE
         glm::vec3 position;
         glm::vec3 direction;
         
-        float cutOff = glm::cos(glm::radians(12.5));
-        float outerCutOff = glm::cos(glm::radians(15.0));
+        float cutOff = glm::cos(glm::radians(5.0));
+        float outerCutOff = glm::cos(glm::radians(10.0));
         float constant = 1.0;
         float linear = 0.09;
         float quadratic = 0.032f;
