@@ -1,3 +1,10 @@
+## [0.3.1](https://github.com/kaijurgeit/TinyEngine/compare/v0.3.0...v0.3.1) (2023-08-30)
+
+
+### Bug Fixes
+
+* Minor change. ([633068d](https://github.com/kaijurgeit/TinyEngine/commit/633068dc091e96af23e384c30facd7635fc4a84f))
+
 # [0.3.0](https://github.com/kaijurgeit/TinyEngine/compare/v0.2.0...v0.3.0) (2023-08-30)
 
 
