@@ -3,6 +3,8 @@
 
 #include <glad/glad.h>
 
+#include "Application.h"
+#include "Camera.h"
 #include "Event.h"
 
 namespace  TE
@@ -39,6 +41,7 @@ namespace  TE
             glfwTerminate();
         }
         glfwMakeContextCurrent(GlfwWindow);
+        glfwSetInputMode(GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
     void Window::InitCallbacks()
@@ -48,6 +51,33 @@ namespace  TE
         glfwSetFramebufferSizeCallback(GlfwWindow, [](GLFWwindow* window, int width, int height)
         {
             glViewport(0, 0, width, height);
+        });
+        
+        glfwSetCursorPosCallback(GlfwWindow, [](GLFWwindow* window, double xposIn, double yposIn)
+        {
+            Window& self = *(Window*)glfwGetWindowUserPointer(window);
+            float xpos = static_cast<float>(xposIn);
+            float ypos = static_cast<float>(yposIn);
+
+            if (self.mouse.firstMouse)
+            {
+                self.mouse.lastX = xpos;
+                self.mouse.lastY = ypos;
+                self.mouse.firstMouse = false;
+            }
+
+            float xoffset = xpos - self.mouse.lastX;
+            float yoffset = self.mouse.lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+            self.mouse.lastX = xpos;
+            self.mouse.lastY = ypos;
+
+            Application::GetCamera().ProcessMouseMovement(xoffset, yoffset);
+        });
+
+        glfwSetScrollCallback(GlfwWindow, [](GLFWwindow* window, double xoffset, double yoffset)
+        {
+            Application::GetCamera().ProcessMouseScroll(static_cast<float>(yoffset));
         });
 
         glfwSetKeyCallback(GlfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)

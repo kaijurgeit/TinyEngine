@@ -10,6 +10,12 @@ namespace TE
 {
     class TE_API Window
     {
+        struct MouseData
+        {
+            float lastX = 400.f;
+            float lastY = 300.f;
+            bool firstMouse = true;
+        };
     public:
         Window(const char* title, int width, int height);
         Window(const Window& other) = default;
@@ -37,5 +43,7 @@ namespace TE
         int Height;
 
         std::function<void(Event&)> EventCallback;
+
+        MouseData mouse;
     };
 }

@@ -25,8 +25,6 @@ namespace TE
 {
     Application* Application::instance = nullptr;
 #pragma region globals
-    void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-    void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
     void processInput(GLFWwindow *window);
     
     // timing
@@ -49,9 +47,6 @@ namespace TE
         
         std::filesystem::path p(__FILE__);
         path = p.parent_path().parent_path().string() + "/";
-        
-        glfwSetCursorPosCallback(window->GlfwWindow, mouse_callback);
-        glfwSetInputMode(window->GlfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
     
     Application::~Application()
@@ -165,7 +160,7 @@ namespace TE
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
             
-            processInput(window->GlfwWindow);
+            // processInput(window->GlfwWindow);
             renderer->Clear();
             glm::mat4 view = camera->GetViewMatrix();
 
@@ -223,36 +218,6 @@ namespace TE
             Application::GetCamera().ProcessKeyboard(LEFT, deltaTime);
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
             Application::GetCamera().ProcessKeyboard(RIGHT, deltaTime);
-    }
-
-    // glfw: whenever the mouse moves, this callback is called
-    // -------------------------------------------------------
-    void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
-    {
-        float xpos = static_cast<float>(xposIn);
-        float ypos = static_cast<float>(yposIn);
-
-        if (firstMouse)
-        {
-            lastX = xpos;
-            lastY = ypos;
-            firstMouse = false;
-        }
-
-        float xoffset = xpos - lastX;
-        float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-        lastX = xpos;
-        lastY = ypos;
-
-        Application::GetCamera().ProcessMouseMovement(xoffset, yoffset);
-    }
-
-    // glfw: whenever the mouse scroll wheel scrolls, this callback is called
-    // ----------------------------------------------------------------------
-    void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-    {
-        Application::GetCamera().ProcessMouseScroll(static_cast<float>(yoffset));
     }
 }
 
