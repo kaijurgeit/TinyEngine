@@ -13,6 +13,6 @@ namespace TE
         void Unbind() const;
         
     private:
-        unsigned int Id;
+        unsigned int id;
     };    
 }

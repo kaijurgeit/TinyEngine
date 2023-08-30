@@ -7,12 +7,12 @@ namespace TE
 {
     VertexArray::VertexArray()
     {
-        glGenVertexArrays(1, &Id);
+        glGenVertexArrays(1, &id);
     }
 
     VertexArray::~VertexArray()
     {
-        glDeleteVertexArrays(1, &Id);
+        glDeleteVertexArrays(1, &id);
     }
 
     void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout)
@@ -32,7 +32,7 @@ namespace TE
 
     void VertexArray::Bind() const
     {  
-        glBindVertexArray(Id);
+        glBindVertexArray(id);
     }
 
     void VertexArray::Unbind() const

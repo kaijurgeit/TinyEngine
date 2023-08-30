@@ -29,20 +29,20 @@ namespace TE
         void OnUpdate();
         bool ShouldClose();
 
-        std::string GetTitle() const { return Title; }
-        int GetWidth() const { return Width; }
-        int GetHeight() const { return Height; }
+        std::string GetTitle() const { return title; }
+        int GetWidth() const { return width; }
+        int GetHeight() const { return height; }
         
-        void SetEventCallback(const std::function<void(Event&)>& eventCallback) { EventCallback = eventCallback; }
+        void SetEventCallback(const std::function<void(Event&)>& eventCallback) { this->eventCallback = eventCallback; }
         
-        GLFWwindow* GlfwWindow;
+        GLFWwindow* glfwWindow;
 
     private:
-        std::string Title;
-        int Width;
-        int Height;
+        std::string title;
+        int width;
+        int height;
 
-        std::function<void(Event&)> EventCallback;
+        std::function<void(Event&)> eventCallback;
 
         MouseData mouse;
     };

@@ -159,11 +159,11 @@ namespace TE
             mat->GetTexture(type, i, &str);
             // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
             bool skip = false;
-            for(unsigned int j = 0; j < textures_loaded.size(); j++)
+            for(unsigned int j = 0; j < texturesLoaded.size(); j++)
             {
-                if(std::strcmp(textures_loaded[j].GetPath().data(), str.C_Str()) == 0)
+                if(std::strcmp(texturesLoaded[j].GetPath().data(), str.C_Str()) == 0)
                 {
-                    textures.push_back(textures_loaded[j]);
+                    textures.push_back(texturesLoaded[j]);
                     skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
                     break;
                 }
@@ -173,10 +173,10 @@ namespace TE
                 const char* file_name = str.C_Str();
                 std::string full_path = this->directory + "/" + file_name;
                 Texture texture(full_path.c_str());
-                texture.Type = typeName;
-                texture.Path = str.C_Str();
+                texture.type = typeName;
+                texture.path = str.C_Str();
                 textures.push_back(texture);
-                textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
+                texturesLoaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
             }
         }
         return textures;

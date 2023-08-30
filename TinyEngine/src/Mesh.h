@@ -30,7 +30,6 @@ namespace TE
 
         static Mesh CreateCube(VertexArray* vao, Material* material, glm::vec3 position, float scale = 1.0);
         
-    public:
         void Draw();
         void Draw(Shader &shader);
         

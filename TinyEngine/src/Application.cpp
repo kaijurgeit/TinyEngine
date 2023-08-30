@@ -211,17 +211,17 @@ namespace TE
 
     void Application::ProcessInput()
     {
-        if (glfwGetKey(window->GlfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(window->GlfwWindow, true);
+        if (glfwGetKey(window->glfwWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            glfwSetWindowShouldClose(window->glfwWindow, true);
 
-        if (glfwGetKey(window->GlfwWindow, GLFW_KEY_W) == GLFW_PRESS)
-            Application::GetCamera().ProcessKeyboard(FORWARD, Application::GetDeltaTime());
-        if (glfwGetKey(window->GlfwWindow, GLFW_KEY_S) == GLFW_PRESS)
-            Application::GetCamera().ProcessKeyboard(BACKWARD, Application::GetDeltaTime());
-        if (glfwGetKey(window->GlfwWindow, GLFW_KEY_A) == GLFW_PRESS)
-            Application::GetCamera().ProcessKeyboard(LEFT, Application::GetDeltaTime());
-        if (glfwGetKey(window->GlfwWindow, GLFW_KEY_D) == GLFW_PRESS)
-            Application::GetCamera().ProcessKeyboard(RIGHT, Application::GetDeltaTime());
+        if (glfwGetKey(window->glfwWindow, GLFW_KEY_W) == GLFW_PRESS)
+            Application::GetCamera().ProcessKeyboard(EDirection::Forward, Application::GetDeltaTime());
+        if (glfwGetKey(window->glfwWindow, GLFW_KEY_S) == GLFW_PRESS)
+            Application::GetCamera().ProcessKeyboard(EDirection::Backward, Application::GetDeltaTime());
+        if (glfwGetKey(window->glfwWindow, GLFW_KEY_A) == GLFW_PRESS)
+            Application::GetCamera().ProcessKeyboard(EDirection::Left, Application::GetDeltaTime());
+        if (glfwGetKey(window->glfwWindow, GLFW_KEY_D) == GLFW_PRESS)
+            Application::GetCamera().ProcessKeyboard(EDirection::Right, Application::GetDeltaTime());
     }
 }
 

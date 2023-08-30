@@ -22,7 +22,7 @@ namespace TE
 
     private:
         std::vector<Mesh> meshes;
-        std::vector<Texture> textures_loaded;
+        std::vector<Texture> texturesLoaded;
         std::string directory;
 
         void loadModel(std::string path);

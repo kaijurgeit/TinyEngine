@@ -8,40 +8,40 @@
 namespace TE
 {
     ShaderElement::ShaderElement(unsigned int type, const char* path)
-        : Type(type), Source(TE::FileSystem::ReadFile(path))
+        : type(type), source(TE::FileSystem::ReadFile(path))
     {
     }
 
     ShaderElement::ShaderElement(unsigned type, std::string path)
-        : Type(type), Source(TE::FileSystem::ReadFile(path))
+        : type(type), source(TE::FileSystem::ReadFile(path))
     {
     }
 
     unsigned int ShaderElement::Compile()
     {
-        Id = glCreateShader(Type);
-        const char* src = Source.c_str();
-        glShaderSource(Id, 1, &src, nullptr);
-        glCompileShader(Id);
+        id = glCreateShader(type);
+        const char* src = source.c_str();
+        glShaderSource(id, 1, &src, nullptr);
+        glCompileShader(id);
 
         LogDeleteIfCompilationFails();
 
-        return Id;
+        return id;
     }
 
     void ShaderElement::LogDeleteIfCompilationFails()
     {
         int success;
-        glGetShaderiv(Id, GL_COMPILE_STATUS, &success);
+        glGetShaderiv(id, GL_COMPILE_STATUS, &success);
         if(!success)
         {
             int length;
-            glGetShaderiv(Id, GL_INFO_LOG_LENGTH, &length);
+            glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
             char* infoLog = (char*)alloca(length * sizeof(char));
-            glGetShaderInfoLog(Id, length, &length, infoLog);
+            glGetShaderInfoLog(id, length, &length, infoLog);
             std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
-            glDeleteShader(Id);
-            Id = 0;
+            glDeleteShader(id);
+            id = 0;
         }
     }
 }

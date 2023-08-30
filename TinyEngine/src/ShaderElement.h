@@ -17,9 +17,9 @@ namespace TE
     private:
         void ShaderElement::LogDeleteIfCompilationFails();
         
-        unsigned int Type;
-        std::string Source;
-        unsigned int Id = -1;
+        unsigned int type;
+        std::string source;
+        unsigned int id = -1;
     };
     
 }
