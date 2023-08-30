@@ -29,8 +29,7 @@ namespace TE
     public:
         VertexBufferLayout()
             : Stride(0)
-        {
-            
+        {            
         }
 
         template<typename T>

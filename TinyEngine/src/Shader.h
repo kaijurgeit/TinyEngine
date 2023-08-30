@@ -20,8 +20,6 @@ namespace TE
         Shader& operator=(const Shader& other) = default;
         Shader& operator=(Shader&& other) noexcept = default;
         ~Shader();
-
-        void Foo() { ; }
         
         unsigned int Create();
         void Bind() const;
@@ -38,6 +36,8 @@ namespace TE
         void SetUniform(const std::string &name, const glm::mat2 &mat) const;
         void SetUniform(const std::string &name, const glm::mat3 &mat) const;
         void SetUniform(const std::string &name, const glm::mat4 &mat) const;
+        
+#define SETUNIFORM(var) SetUniform(#var, var)
     
     private:
         bool created = false;

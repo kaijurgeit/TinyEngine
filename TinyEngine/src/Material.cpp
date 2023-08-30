@@ -1,24 +1,21 @@
 ﻿#include "Material.h"
 
+#include "Application.h"
+#include "Camera.h"
 #include "Shader.h"
 
 namespace TE
-{
-    Material::Material(Shader* shader, glm::vec4 baseColor)
+{    
+    Material::Material(Shader& shader)
         : shader(shader)
     {
-        data.BaseColor = baseColor;
+        shader.Bind();
     }
 
-    Material::Material(Shader* shader, MaterialData data)
-        : shader(shader), data(data)
+    void Material::Update(glm::mat4 model)
     {
-        
-    }
-
-    void Material::Update(glm::mat4 mvp)
-    {
-        shader->SetUniform("MVP", mvp);
-        shader->SetUniform("color", data.BaseColor);
+        shader.Bind();
+        glm::mat4 mvp = Application::GetProjection() * Application::GetCamera().GetViewMatrix() * model; 
+        shader.SetUniform("mvp", mvp);
     }
 }

@@ -7,6 +7,7 @@ namespace TE
     {
         friend class Model;
     public:
+        Texture(const std::string& path);
         Texture(const char* path);
         ~Texture();
         Texture(const Texture&) = default;

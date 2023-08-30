@@ -26,13 +26,18 @@ namespace TE
         static Window& GetWindow() { return *Get().window.get(); }
         static Renderer& GetRenderer() { return *Get().renderer.get(); }
         static Camera& GetCamera() { return *Get().camera.get(); }
-        // static glm::mat4 Projection();
+        static std::string& GetPath() { return Get().path; }
+        static glm::mat4 GetProjection();
         
     private:
         std::unique_ptr<Window> window;
         std::unique_ptr<Renderer> renderer;
         std::unique_ptr<Camera> camera;
+        std::string path;
 
+    public:
+
+    private:
         static Application* instance;
     };
     

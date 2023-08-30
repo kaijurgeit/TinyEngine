@@ -18,6 +18,11 @@ namespace TE
         return ReadFile(path.c_str());
     }
 
+    std::vector<float> FileSystem::FileToFloatVector(const std::string& str)
+    {
+        return FileToFloatVector(str.c_str());
+    }
+
     std::vector<float> FileSystem::FileToFloatVector(const char* path)
     {
         return ParseToFloatVector(ReadFile(path));

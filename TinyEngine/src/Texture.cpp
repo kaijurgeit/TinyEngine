@@ -8,6 +8,12 @@
 
 namespace TE
 {
+    Texture::Texture(const std::string& path)
+        : Texture(path.c_str())
+    {
+        
+    }
+
     Texture::Texture(const char* path)
         : Path(path)
     {

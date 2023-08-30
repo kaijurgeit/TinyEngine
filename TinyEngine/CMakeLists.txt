@@ -19,6 +19,12 @@ set(SRC_FILES
     Main.h
     Material.cpp
     Material.h
+    Material_Flat.cpp
+    Material_Flat.h
+    Material_Phong.cpp
+    Material_Phong.h
+    Material_Texture.cpp
+    Material_Texture.h
     Mesh.cpp
     Mesh.h
     Model.cpp
@@ -45,8 +51,6 @@ list(TRANSFORM SRC_FILES PREPEND "src/")
 set(SHADER_FILES
     Flat.frag
     Flat.vert
-    Light.frag
-    Light.vert
     Model.frag
     Model.vert
     Phong.frag

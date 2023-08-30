@@ -2,19 +2,17 @@
 
 #include <glm/ext/matrix_transform.hpp>
 
+#include "Application.h"
+#include "Camera.h"
 #include "glad/glad.h"
 #include "Shader.h"
 #include "VertexArray.h"
 
 namespace TE
 {
-    Mesh::Mesh(VertexArray* vertexArray, Material* material, glm::mat4 projection, glm::mat4 model)
-        : vertexArray(vertexArray), material(material), projection(projection), model(model)
+    Mesh::Mesh(VertexArray* vertexArray, Material* material, glm::mat4 model)
+        : vertexArray(vertexArray), material(material), model(model)
     {
-        Shader* shader = material->GetShader();
-        shader->Bind();
-        shader->SetUniform("model", model);
-        shader->SetUniform("projection", projection);
     }
 
     Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
@@ -23,18 +21,18 @@ namespace TE
         SetupMesh();
     }
 
-    Mesh Mesh::CreateCube(TE::VertexArray* vao, Material* material, glm::mat4 projection, glm::vec3 position, float scale)
+    Mesh Mesh::CreateCube(TE::VertexArray* vao, Material* material, glm::vec3 position, float scale)
     {
         glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
         model = glm::scale(model, glm::vec3(scale)); // a smaller cube
-        return Mesh(vao, material, projection, model);
+        return Mesh(vao, material, model);
     }
     
-    void Mesh::Draw(glm::mat4 view)
+    void Mesh::Draw()
     {
-        glm::mat4 mvp = projection * view * model;
-        material->Update(mvp);
-        vertexArray->Bind();      
+        vertexArray->Bind();
+        glm::mat4 mvp = Application::GetProjection() * Application::GetCamera().GetViewMatrix() * model;
+        material->Update(model);
         glDrawArrays(GL_TRIANGLES, 0, 36);        
     }
 
