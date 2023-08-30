@@ -15,7 +15,7 @@ namespace TE
     void Material::Update(glm::mat4 model)
     {
         shader.Bind();
-        glm::mat4 mvp = Application::GetProjection() * Application::GetCamera().GetViewMatrix() * model; 
+        glm::mat4 mvp = Application::GetProjection() * Application::GetCamera().GetView() * model; 
         shader.SetUniform("mvp", mvp);
     }
 }

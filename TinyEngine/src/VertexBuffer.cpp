@@ -7,19 +7,19 @@ namespace TE
 {
     VertexBuffer::VertexBuffer(const void* data, unsigned size)
     {
-        glGenBuffers(1, &Id);
+        glGenBuffers(1, &id);
         Bind();
         glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
     }
 
     VertexBuffer::~VertexBuffer()
     {
-        glDeleteBuffers(1, &Id);
+        glDeleteBuffers(1, &id);
     }
 
     void VertexBuffer::Bind() const
     {
-        glBindBuffer(GL_ARRAY_BUFFER, Id);
+        glBindBuffer(GL_ARRAY_BUFFER, id);
     }
 
     void VertexBuffer::Unbind() const

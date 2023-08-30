@@ -18,18 +18,18 @@ namespace TE
         void Bind(unsigned int slot = 0) const;
         void Unbind() const;
         
-        unsigned GetId() const { return Id; }
-        std::string GetType() const { return Type; }
-        std::string GetPath() const { return Path; }
+        unsigned GetId() const { return id; }
+        std::string GetType() const { return type; }
+        std::string GetPath() const { return path; }
         
     private:
-        unsigned int Id;
-        std::string Path;
-        std::string Type;
-        unsigned char* Buffer = nullptr;
-        int Width = 0;
-        int Height = 0;
-        int ChannelCount = 0;
-        int BitsPerPixel = 0;
+        unsigned int id;
+        std::string path;
+        std::string type;
+        unsigned char* buffer = nullptr;
+        int width = 0;
+        int height = 0;
+        int channelCount = 0;
+        int bitsPerPixel = 0;
     };
 }

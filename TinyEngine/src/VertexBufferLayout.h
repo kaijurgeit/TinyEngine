@@ -28,7 +28,7 @@ namespace TE
     {
     public:
         VertexBufferLayout()
-            : Stride(0)
+            : stride(0)
         {            
         }
 
@@ -50,31 +50,31 @@ namespace TE
         template<>
         void Add<float>(unsigned int count)
         {
-            Elements.push_back({GL_FLOAT, count, GL_FALSE});
-            Stride += count * sizeof(GL_FLOAT); 
+            elements.push_back({GL_FLOAT, count, GL_FALSE});
+            stride += count * sizeof(GL_FLOAT); 
         }
 
         template<>
         void Add<unsigned int>(unsigned int count)
         {
-            Elements.push_back({GL_UNSIGNED_INT, count, GL_FALSE});
-            Stride += count * sizeof(GL_UNSIGNED_INT); 
+            elements.push_back({GL_UNSIGNED_INT, count, GL_FALSE});
+            stride += count * sizeof(GL_UNSIGNED_INT); 
         }
         
         template<>
         void Add<unsigned char>(unsigned int count)
         {
-            Elements.push_back({GL_UNSIGNED_BYTE, count, GL_TRUE});
-            Stride += count * sizeof(GL_UNSIGNED_BYTE); 
+            elements.push_back({GL_UNSIGNED_BYTE, count, GL_TRUE});
+            stride += count * sizeof(GL_UNSIGNED_BYTE); 
         }
 
-        inline std::vector<VertexBufferElement> GetElements() const { return Elements; }
-        inline unsigned int GetStride() const { return Stride; }
+        inline std::vector<VertexBufferElement> GetElements() const { return elements; }
+        inline unsigned int GetStride() const { return stride; }
         
         
     private:
-        unsigned int Stride;
-        std::vector<VertexBufferElement> Elements;
+        unsigned int stride;
+        std::vector<VertexBufferElement> elements;
     };
 
 }

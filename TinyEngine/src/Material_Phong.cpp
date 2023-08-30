@@ -130,7 +130,7 @@ namespace TE
         shader.Bind();        
         shader.SetUniform("projection", Application::GetProjection());
         shader.SetUniform("model", model);
-        shader.SetUniform("view", Application::GetCamera().GetViewMatrix());            
+        shader.SetUniform("view", Application::GetCamera().GetView());            
         shader.SetUniform("viewPos", Application::GetCamera().GetPosition());
         shader.SetUniform("spotLight.position", spotLight.position);
         shader.SetUniform("spotLight.direction", spotLight.direction);

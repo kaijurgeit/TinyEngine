@@ -26,7 +26,7 @@ namespace TE
         for (ShaderElement& shader : Shaders)
         {
             shader.Compile();
-            glAttachShader(Id, shader.Id);        
+            glAttachShader(Id, shader.id);        
         }
 
         glLinkProgram(Id);
@@ -35,7 +35,7 @@ namespace TE
         
         for (const ShaderElement& shader : Shaders)
         {
-            glDeleteShader(shader.Id);
+            glDeleteShader(shader.id);
         }
 
         created = true;

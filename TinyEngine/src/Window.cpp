@@ -3,12 +3,14 @@
 
 #include <glad/glad.h>
 
+#include "Application.h"
+#include "Camera.h"
 #include "Event.h"
 
 namespace  TE
 {   
     Window::Window(const char* title, int width, int height)
-        : Title(title), Width(width), Height(height)
+        : title(title), width(width), height(height)
     {
         InitWindow(title, width, height);
         InitCallbacks();
@@ -16,7 +18,7 @@ namespace  TE
 
     Window::~Window()
     {
-        glfwDestroyWindow(GlfwWindow);
+        glfwDestroyWindow(glfwWindow);
         glfwTerminate();
     }
 
@@ -32,25 +34,53 @@ namespace  TE
 #endif
 
         // Create GLFW window
-        GlfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
-        if (GlfwWindow == NULL)
+        glfwWindow = glfwCreateWindow(width, height, title, NULL, NULL);
+        if (glfwWindow == NULL)
         {
             std::cout << "Failed to create GLFW window" << std::endl;
             glfwTerminate();
         }
-        glfwMakeContextCurrent(GlfwWindow);
+        glfwMakeContextCurrent(glfwWindow);
+        glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
     void Window::InitCallbacks()
     {
-        glfwSetWindowUserPointer(GlfwWindow, this);
+        glfwSetWindowUserPointer(glfwWindow, this);
         
-        glfwSetFramebufferSizeCallback(GlfwWindow, [](GLFWwindow* window, int width, int height)
+        glfwSetFramebufferSizeCallback(glfwWindow, [](GLFWwindow* window, int width, int height)
         {
             glViewport(0, 0, width, height);
         });
+        
+        glfwSetCursorPosCallback(glfwWindow, [](GLFWwindow* window, double xposIn, double yposIn)
+        {
+            Window& self = *(Window*)glfwGetWindowUserPointer(window);
+            float xpos = static_cast<float>(xposIn);
+            float ypos = static_cast<float>(yposIn);
 
-        glfwSetKeyCallback(GlfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+            if (self.mouse.firstMouse)
+            {
+                self.mouse.lastX = xpos;
+                self.mouse.lastY = ypos;
+                self.mouse.firstMouse = false;
+            }
+
+            float xoffset = xpos - self.mouse.lastX;
+            float yoffset = self.mouse.lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+            self.mouse.lastX = xpos;
+            self.mouse.lastY = ypos;
+
+            Application::GetCamera().ProcessMouseMovement(xoffset, yoffset);
+        });
+
+        glfwSetScrollCallback(glfwWindow, [](GLFWwindow* window, double xoffset, double yoffset)
+        {
+            Application::GetCamera().ProcessMouseScroll(static_cast<float>(yoffset));
+        });
+
+        glfwSetKeyCallback(glfwWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
         {
             Window& self = *(Window*)glfwGetWindowUserPointer(window);
             
@@ -59,19 +89,19 @@ namespace  TE
                 case GLFW_PRESS:
                 {
                     InputEvent event(key, ETriggerEvent::Pressed);
-                    self.EventCallback(event);
+                    self.eventCallback(event);
                     break;
                 }
                 case GLFW_RELEASE:
                 {   
                     InputEvent event(key, ETriggerEvent::Released);
-                    self.EventCallback(event);
+                    self.eventCallback(event);
                     break;
                 }
                 case GLFW_REPEAT:
                 {   
                     InputEvent event(key, ETriggerEvent::Repeat);
-                    self.EventCallback(event);
+                    self.eventCallback(event);
                     break;
                 }
             }
@@ -80,13 +110,13 @@ namespace  TE
 
     void Window::OnUpdate()
     {
-        glfwSwapBuffers(GlfwWindow);
+        glfwSwapBuffers(glfwWindow);
         glfwPollEvents();
     }
 
     bool Window::ShouldClose()
     {
-        return glfwWindowShouldClose(GlfwWindow);
+        return glfwWindowShouldClose(glfwWindow);
     }
 }
 

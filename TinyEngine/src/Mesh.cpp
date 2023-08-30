@@ -31,7 +31,7 @@ namespace TE
     void Mesh::Draw()
     {
         vertexArray->Bind();
-        glm::mat4 mvp = Application::GetProjection() * Application::GetCamera().GetViewMatrix() * model;
+        glm::mat4 mvp = Application::GetProjection() * Application::GetCamera().GetView() * model;
         material->Update(model);
         glDrawArrays(GL_TRIANGLES, 0, 36);        
     }
