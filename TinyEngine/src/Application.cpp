@@ -42,7 +42,7 @@ namespace TE
     }
 
     void Application::UpdateDeltaTime()
-    {
+    { 
         const float currentFrameTime = static_cast<float>(glfwGetTime());
         deltaTime = currentFrameTime - lastFrameTime;
         lastFrameTime = currentFrameTime;
