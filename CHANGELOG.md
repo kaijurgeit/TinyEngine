@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/kaijurgeit/TinyEngine/compare/v0.2.0...v0.3.0) (2023-08-30)
+
+
+### Features
+
+* Major pipeline changes and basic support for Event dispatichng and Input Events. ([ee596f8](https://github.com/kaijurgeit/TinyEngine/commit/ee596f898e3a0ecf0c3a9293466e310e4c467108))
+
 # [0.2.0](https://github.com/kaijurgeit/TinyEngine/compare/v0.1.0...v0.2.0) (2023-08-11)
 
 
