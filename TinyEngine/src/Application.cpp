@@ -114,13 +114,20 @@ namespace TE
 
 #pragma region PointLights
             // positions of the point lights
-    glm::vec3 pointLightPositions[] = {
-        glm::vec3( 0.7f,  0.2f,  2.0f),
-        glm::vec3( 2.3f, -3.3f, -4.0f),
-        glm::vec3(-4.0f,  2.0f, -12.0f),
-        glm::vec3( 0.0f,  0.0f, -3.0f)
-    };
-        std::array<glm::vec3, 4> &pos = reinterpret_cast<std::array<glm::vec3, 4>&>(pointLightPositions);
+        glm::vec3 pointLightPositions_[] = {
+            glm::vec3( 0.7f,  0.2f,  2.0f),
+            glm::vec3( 2.3f, -3.3f, -4.0f),
+            glm::vec3(-4.0f,  2.0f, -12.0f),
+            glm::vec3( 0.0f,  0.0f, -3.0f)
+        };
+        std::array<glm::vec3, 4> &pointLightPositions = reinterpret_cast<std::array<glm::vec3, 4>&>(pointLightPositions_);
+        
+        glm::vec3 phongCubePosition(0.0, 0.0, 0.0);
+        for (glm::vec3 pointLightPosition : pointLightPositions)
+        {
+            phongCubePosition += pointLightPosition;
+        }
+        phongCubePosition *= 1.0 / pointLightPositions.size();
 #pragma endregion PointLights
         
 #pragma region phongCube
@@ -131,16 +138,8 @@ namespace TE
         Texture texDiff(path + "resources/textures/container2.png"); 
         Texture texSpec(path + "resources/textures/container2_specular.png");
         MaterialData materialData = { &texDiff, &texSpec, 32.f };        
-        Material_Phong matPhong(phong, materialData, pos);
-        Mesh phongCube = Mesh::CreateCube(&va, &matPhong, glm::vec3(3.0f, 0.5f, 4.0f), 0.5);
-        
-        constexpr glm::vec3 phongCubePos(0.0f, 0.0f, 0.0f);
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, phongCubePos);
-        model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
-
-        phong.Bind();
-        
+        Material_Phong matPhong(phong, materialData, pointLightPositions);
+        Mesh phongCube = Mesh::CreateCube(&va, &matPhong, phongCubePosition, 0.5);
 #pragma endregion phongCube
 
 #pragma region Model
@@ -166,8 +165,6 @@ namespace TE
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
             
-            // input
-            // -----
             processInput(window->GlfwWindow);
             renderer->Clear();
             glm::mat4 view = camera->GetViewMatrix();
@@ -186,24 +183,18 @@ namespace TE
 
             phongCube.Draw();
 
-            
-            // for (unsigned int i = 0; i < 4; i++)
-            // {
-            //     model = glm::mat4(1.0f);
-            //     model = glm::translate(model, pointLightPositions[i]);
-            //     model = glm::scale(model, glm::vec3(0.2f));                
-            //     flat.SetUniform("model", model);
-            //     renderer->Draw(va, light);
-            // }
-
             ourModel.Draw(ourShader);
+
+            for (const glm::vec3& pointLightPosition : pointLightPositions)
+            {
+                Material_Flat flatWhite(shaFlat, glm::vec4(1.0, 1.0, 1.0, 1.0));
+                Mesh whiteCube = Mesh::CreateCube(&va, &flatWhite, pointLightPosition, 0.1);
+                whiteCube.Draw();
+            }
+
             
             window->OnUpdate();               
         }
-
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
-    glfwTerminate();
     }
 
     void Application::OnEvent(Event& event)
