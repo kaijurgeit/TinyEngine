@@ -1,3 +1,10 @@
+## [0.3.2](https://github.com/kaijurgeit/TinyEngine/compare/v0.3.1...v0.3.2) (2024-12-18)
+
+
+### Bug Fixes
+
+* **npm:** update vulnerable dependencies ([0c74305](https://github.com/kaijurgeit/TinyEngine/commit/0c74305e12b9c3d846f099c446401dd7e4608726))
+
 ## [0.3.1](https://github.com/kaijurgeit/TinyEngine/compare/v0.3.0...v0.3.1) (2023-08-30)
 
 
